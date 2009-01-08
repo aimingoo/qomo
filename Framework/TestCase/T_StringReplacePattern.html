@@ -1,0 +1,117 @@
+﻿<script src="../../Qomo.js"></script>
+
+<script>
+// make test source data
+var src = (new Array(12+1)).join('test test test %s test test test ')+'\n';
+var tbl = function(row) {
+  // a big formated table
+  var _tbl = [];
+  for (var i=0; i<10*10000; i++) {
+    _tbl.push(row);
+  }
+  return _tbl;
+}([0,1,2,3,4,5,6,7,8,9,10,11]);
+
+
+/* demo 0, very very slow
+  - 0.3*10000,  7453ms
+  - no no no~ can't test more
+*/
+void function() {
+  var d = new Date;
+  var ctx1 = '';
+  for (var i=0; i<tbl.length; i++) {
+    ctx1 += format(src, tbl[i]);
+  }
+  alert(new Date - d);
+};
+
+/* demo 1, slow
+  - 5*10000,  11485ms
+  - 10*10000, 26252ms
+*/
+void function() {
+  var d = new Date;
+  var ctx1 = [];
+  for (var i=0; i<tbl.length; i++) {
+    ctx1.push(format(src, tbl[i]));
+  }
+  ctx1 = ctx1.join();
+  alert(new Date - d);
+}
+
+/* demo 2, fast
+  - 5*10000,  5812
+  - 10*10000, out of memory!!!
+*/
+void function() {
+  var d = new Date;
+  var ctx1 = (new Array(tbl.length + 1)).join(src);
+  ctx1 = ctx1.replace(/%(\D|\d+)/g, function(arr) {
+    var row = 0;
+    var cell = 0;
+    return function($0,$1) {
+      switch ($1) {
+        case 's':
+        case 'S': return arr[row][cell++];
+        case '%': return $1;
+        default : return (isNaN($1) ? $0 : arr[row][cell]);
+      }
+      if (cell == arr.row.length ) row++, cell=0;
+    }
+  }(tbl));
+  alert(new Date - d);
+}
+
+/* demo 3, very fast
+  - 5*10000,  1329
+  - 10*10000,  2594
+  - 30*10000,  7938~15609~...
+*/
+void function() {
+  function fmt_Pattern(patt) {
+    return ('$'+patt.join('|,$')).split('|,');
+  }
+  function fmt_NumberRow(count) {
+    return (new Array(count).join('(.*?),')) + '([^,]*),?';
+  }
+
+  var d = new Date;
+  var patt = [1,2,3,4,5,6,7,8,9,10,11,12];  // data position in source string
+  var src_pattern = format(src, fmt_Pattern(patt));
+  var data_pattern = new RegExp(fmt_NumberRow(12), 'g');
+  var ctx = tbl.toString().replace(data_pattern, src_pattern);
+  alert(new Date - d);
+}
+
+/* qomo 's patten, same of demo 3
+*/
+void function() {
+/*
+  var patt = new Pattern(src);
+  var fmt = [1,2,3,4,5,6,7,8,9,10,11,12];
+  var sty = 12;
+*/
+
+  var patt = new Pattern('value: %s, %s, %s, %s');
+  var fmt = [1,2,3,4];
+  var sty = 4;
+  var tbl = [
+    [1,2,3,4],
+    [4,6,7,9]
+  ];
+
+
+  /* or next:
+    - patt.patten(tbl, fmt, sty)
+    - patt.patten(tbl, fmt)
+  */
+  var d = new Date;
+  patt.format = fmt;
+  patt.style = sty;
+  var ctx = patt.pattern(tbl);
+  alert(ctx);
+  alert(new Date - d);
+}();
+
+</script>

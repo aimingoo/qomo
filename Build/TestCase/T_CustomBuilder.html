@@ -1,0 +1,299 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<HEAD>
+<TITLE>Qomo可定制编译工具</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+</HEAD>
+
+<BODY>
+<style>
+#box {
+ padding: 5px;  
+ width: 300px;
+ height: 650px;
+ border: 2px solid gray;
+}
+
+TABLE {
+  width: 90%;
+  table-layout: fixed;
+}
+
+.left {
+  width: 320px;
+}
+
+.right {
+  border: 1px dashed gray;
+}
+
+.opt {
+}
+
+#infoArea {
+ width: 98%;
+ height: 650px;
+ word-wrap: break-word;
+ overflow: auto;
+}
+
+</style>
+
+<table>
+<tr>
+<td class="left">
+  <div id="box">
+
+  <input type="checkbox" class="opt" name="Building" checked disabled>编译系统<br/>
+  <input type="checkbox" class="opt" name="Debugging">调试模块<br/>
+  　<input type="checkbox" class="opt" name="OutputDebug">基本调试输出<br/>
+  　<input type="checkbox" class="opt" name="Profiling">性能分析模块<br/>
+  　　<input type="checkbox" class="opt" name="RepImport">重置装载程序(以分析内核载入)<br/>
+
+  <input type="radio" name="ImportCoreConfig" checked>装载器内核配置<br/>
+  　<input type="checkbox" class="opt" name="RewriteImport" disabled>重写装载模块(用户定制代码)<br/>
+  　<input type="checkbox" class="opt" name="NoneImport" disabled>无$import()模块<br/>
+  　<input type="checkbox" class="opt" name="NoneAjax" disabled>无Ajax()模块<br/>
+
+  <input type="checkbox" class="opt" name="Error">错误与异常模块<br/>
+  <input type="checkbox" class="opt" name="Protocol">内部协议<br/>
+  <input type="radio" name="CompatFrameworkConfig" checked>兼容层配置<br/>
+  　<input type="checkbox" class="opt" name="CompatLayer" checked>兼容编译环境<br/>
+  　　<input type="checkbox" class="opt" name="IncludeFramework" checked disabled>包含兼容框架<br/>
+  　<input type="checkbox" class="opt" name="IeAabsolutePath">(*注1)对IE使用绝对路径分析<br/>
+  　<input type="checkbox" class="opt" name="IeDecode">(*注1)对IE使用解码器(兼容GB2312)<br/><br/>
+
+  <input type="checkbox" class="opt" name="Interface">接口(Interface)系统支持<br/>
+  <input type="checkbox" class="opt" name="Namespace">使用命名化系统(命名空间与别名)<br/>
+  <input type="checkbox" class="opt" name="Object" checked disabled>面向对象扩展<br/>
+  <input type="checkbox" class="opt" name="Aspect">面向切面编程<br/>
+  <input type="checkbox" class="opt" name="Templet">模板系统<br/>
+  <input type="checkbox" class="opt" name="CommonClasses">载入通用类库<br/>
+  <input type="checkbox" class="opt" name="Graphics" disabled>图形组件库<br/>
+  <input type="checkbox" class="opt" name="Database" disabled>数据库组件库<br/>
+  <input type="checkbox" class="opt" name="Controls">载入扩展界面控件<br/>
+
+  <br/><br/>
+  <input type="checkbox" name="LicencedInfo" checked disabled>添加文件头
+  <input type="checkbox" name="ClearComment" checked disabled>清除注释
+  <input type="checkbox" name="SkipCompress">不压缩<br/>
+  <input type="checkbox" name="RemoveConfig">移除配置信息<br/>
+  <hr style="width:85%; height:1px">
+  <input type="checkbox" name="checkAll">全部选项
+  <input type="checkbox" name="AutoClose" checked>关闭编译对话框<br/> 
+  <center>
+  <button onclick="doCompiler()">编译</button>&nbsp;
+  <button onclick="doReport()">报告</button>&nbsp;
+  <button onclick="doSave()">保存</button>
+  </center>
+  </div>
+</td>
+
+<td id="infoCell" class="right" align="center">
+<textarea id="infoArea">
+</textarea>
+</td>
+</tr>
+</table>
+
+<pre id="H_released" style="display:none">
+/********************************************************
+Qomo Project v1.0
+[v2.0 beta 1 release 2007.12.30]
+********************************************************/
+</pre>
+
+<script src='../../Qomo.Config.js'></script>
+<script src="uicontrol.js"></script>
+
+<script>
+function setup() {
+  $QomoConfig.set('Building', true);
+
+  $QomoConfig.set('Profiling',        document.getElementsByName('Profiling')[0].checked);
+  $QomoConfig.set('OutputDebug',      document.getElementsByName('OutputDebug')[0].checked);
+  $QomoConfig.set('Debugging',        document.getElementsByName('Debugging')[0].checked);
+  $QomoConfig.set('NoneImport',       document.getElementsByName('NoneImport')[0].checked);
+  $QomoConfig.set('NoneAjax',         document.getElementsByName('NoneAjax')[0].checked);
+  $QomoConfig.set('RepImport',        document.getElementsByName('RepImport')[0].checked);
+
+
+  $QomoConfig.set('CompatLayer',      document.getElementsByName('CompatLayer')[0].checked);
+  $QomoConfig.set('IeAabsolutePath',  document.getElementsByName('IeAabsolutePath')[0].checked);
+  $QomoConfig.set('IeDecode',         document.getElementsByName('IeDecode')[0].checked);
+  $QomoConfig.set('Interface',        document.getElementsByName('Interface')[0].checked);
+  $QomoConfig.set('Error',            document.getElementsByName('Error')[0].checked);
+  $QomoConfig.set('Namespace',        document.getElementsByName('Namespace')[0].checked);
+  $QomoConfig.set('Protocol',         document.getElementsByName('Protocol')[0].checked);
+//  none the item
+//  $QomoConfig.set('Object',           document.getElementsByName('Object')[0].checked);
+  var DebugComponents = false;
+  $QomoConfig.set('Aspect',           document.getElementsByName('Aspect')[0].checked);
+  $QomoConfig.set('Templet',          document.getElementsByName('Templet')[0].checked);
+  $QomoConfig.set('CommonClasses',    DebugComponents || document.getElementsByName('CommonClasses')[0].checked);
+  $QomoConfig.set('Graphics',         DebugComponents || document.getElementsByName('Graphics')[0].checked);
+  $QomoConfig.set('Database',         DebugComponents || document.getElementsByName('Database')[0].checked);
+  $QomoConfig.set('Controls',         document.getElementsByName('Controls')[0].checked);
+
+  $QomoConfig.set('Build/CompatIE50',   false);
+  $QomoConfig.set('Build/SkipCompress', document.getElementsByName('SkipCompress')[0].checked);
+  $QomoConfig.set('Build/ClearComment', document.getElementsByName('ClearComment')[0].checked);
+  $QomoConfig.set('Build/RemoveConfig', document.getElementsByName('RemoveConfig')[0].checked);
+
+  // processes for your self
+  $QomoConfig.set('Build/AutoClose',        document.getElementsByName('AutoClose')[0].checked);
+  $QomoConfig.set('Build/LicencedInfo',     document.getElementsByName('LicencedInfo')[0].checked);
+  $QomoConfig.set('Build/IncludeFramework', document.getElementsByName('IncludeFramework')[0].checked);
+}
+
+// 版本检测与信息
+// 需与Framework/Compat/CompatLayer.js保持一直
+var versionInfo = {
+  msie   : 'Internet Explorer 5+',
+  moznew : 'Mozilla rv:1.7+',
+  mozold : 'Mozilla rv:1.7-',
+  safari : 'Safari for Mac',
+  opera  : 'Opera for Windows',
+  other  : 'Other Browser'
+}
+
+var browserVersion = function() {
+  function ver_compare(v1, v2) {
+    var r_rev = /\D*\.0*/;
+    var a1 = v1.split(r_rev), a2 = v2.split(r_rev);
+    var len = Math.min(a1.length, a2.length);
+    for (var i = 0; i < len; i ++) {
+      if (a1[i] != a2[i]) return (a1[i] - a2[i] > 0 ? 1 : -1)
+    }
+
+    if (a1.length == a2.length) return 0;
+    return (a2.length == len ? 1 : -1)
+  }
+
+  var agt = navigator.userAgent,
+  is_opera = (agt.indexOf("Opera") != -1), // !!window.opera,
+  is_msie = (agt.indexOf("MSIE") != -1) && !is_opera,
+  is_webkit = (agt.indexOf("AppleWebKit") != -1),
+  is_gecko = (agt.indexOf("Gecko") != -1) && !is_webkit,
+  r_gecko = /rv:([\d|\+.]+)/, // match the ... rv: version in Gecko family browsers
+  checker = [
+    'msie',   is_msie,
+    'moznew', is_gecko && r_gecko.exec(agt) && ver_compare(RegExp.$1, '1.7') >= 0,
+    'mozold', is_gecko && !this.moznew,
+    'opera',  is_opera,
+    'safari', is_webkit
+  ];
+
+  for (var i=0; i<checker.length; i++) {
+    if (checker[++i]) return checker[i-1];
+  }
+
+  // if nothing matched
+  return 'other';
+}();
+
+
+// 编译器(Builder.html)的钩子代码
+var rpt_files;
+function collectBuildInfo(buff) {
+  rpt_files = [];
+  buff.join('\n').replace(r_imported, function($0,$1) {
+    rpt_files.push($1);
+    return $0
+  });
+}
+
+$QomoConfig.get = function(n) {
+  return (this["is"+n] || this["has"+n]);
+}
+
+$QomoConfig.set('Build/BuilderHook', function(fb) { // a FinalBuilder object
+  // common format
+  var fmt = ['\\$import\\.setActiveUrl\\(\\".*', , '\\"\\);'];
+
+  // for file: CompatLayer.js
+  fmt[1] = 'CompatLayer.js';
+  var r_CompatLayer = new RegExp(fmt.join(''), 'm');
+  function removeCompatLayer(buff) {
+    var str_noimport = $QomoConfig.get('NoneImport') ? '//' : '';
+    for (var i=0; i<buff.length; i++) {
+      if (r_CompatLayer.test(buff[i])) {
+        buff.splice(i, 2, [
+          '$debug("The Qomo\'s custom version runat ' + versionInfo[browserVersion] + ' only.");',
+          str_noimport + '$import.set("browser", "' + browserVersion + '");'
+        ].join('\n\r'));
+        return;
+      }
+    }
+  }
+
+  fmt[1] = '?'; // 非贪婪匹配
+  var r_PathRegister = new RegExp(fmt.join(''), '');
+  function removePathRegister(buff) {
+    for (var i=0; i<buff.length; i++) {
+      if (r_PathRegister.test(buff[i])) buff[i] = '';
+    }
+  }
+
+  var hk_finish = fb.finish;
+  var hk_buffer = fb.buffer;
+
+  fb.finish = function() {
+    collectBuildInfo(hk_buffer);
+
+/* always include compat framework
+    if (!document.getElementsByName('IncludeFramework')[0].checked) {
+      // find CompatLayer.js, and replace it with other context
+      removeCompatLayer(hk_buffer);
+    }
+*/
+
+/* processed in Building.js
+    if (!document.getElementsByName('Namespace')[0].checked) {
+      removePathRegister(hk_buffer);
+    }
+*/
+
+    // call old method
+    return hk_finish.apply(this, arguments);
+  }
+});
+
+// 编译
+var data_compiled = null;
+function doCompiler() {
+  setup();
+  data_compiled = showModalDialog('../Builder.html', $QomoConfig, "status:no; scrollbars:no; dialogWidth:400px; dialogHeight:250px");
+  doReport();
+}
+
+// 报告
+var r_imported = /\$import\.setActiveUrl\("([^"]*)"\)/g;
+function doReport() {
+  if (!data_compiled) return;
+
+  var rpt = '编译后长度(bytes)：' + data_compiled.length + '\n' +
+            '主要链接文件数: ' + rpt_files.length  + '\n' +
+            '----------------\n'+
+            rpt_files.join('\n');
+
+  document.getElementById('infoArea').value = rpt;
+}
+
+// 保存(显示可被保存的数据)
+function doSave() {
+  if (!data_compiled) return;
+  var licencedInfo = document.getElementsByName('LicencedInfo')[0].checked;
+  var header = document.getElementsByName('H_released')[0].innerText + '\n\r\n\r';
+  var info = document.getElementById('infoArea');
+  var skip_compress = document.getElementsByName('SkipCompress')[0].checked;
+
+  info.style.wordWrap = skip_compress ? 'normal' : 'break-word';
+  info.value = (licencedInfo ? header : '') + data_compiled;
+}
+
+// init infoArea
+document.getElementById('infoArea').value = document.getElementById('H_released').innerText;
+</script>
+</BODY>
+</HTML>

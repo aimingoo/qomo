@@ -1,0 +1,100 @@
+﻿<HTML>
+<HEAD>
+<TITLE>多投事件系统</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<!-- JSEnhance.js和多投事件系统可以脱离system.js运行 -->
+<script src="../../Qomo.js"></script>
+
+<!-- in IE5.5+
+<script src="../RTL/JSEnhance.js"></script>
+-->
+</HEAD>
+
+
+<BODY>
+<script>
+// 演示1: 事件投送列表(多投事件)
+function MyObject() {
+  this.OnDoing = new MuEvent();
+
+  this.foo = function (v1, v2, v3) {
+    this.OnDoing(v1, v2);
+    document.writeln('call foo(%s,%s,%s)'.format(v1,v2,v3), '<br>');
+  }
+}
+
+function Hander1(v1,v2) {
+  alert('Hander1, ' + (v1+v2));
+}
+
+function Hander2(v1,v2) {
+  alert('Hander2, ' + (v1*v2));
+}
+
+function Hander3(v1,v2) {
+  alert('Hander3, with base: ' + (this.base + v1*v2));
+}
+
+var obj = new MyObject();
+// 1. 投送列表为空时，没有事件响应
+// ( 初始时，事件句柄可以被调用 )
+obj.foo(1,2,3);
+alert('none event hander!');
+
+// 2. 添加投送事件
+// ( 将显示两次alert消息 )
+obj.OnDoing.add(Hander1);
+obj.OnDoing.add(Hander2);
+obj.foo(1,2,3);
+
+// 3. 删除投送事件(显示一次alert消息)
+// obj.OnDoing.remove(Hander2);
+// obj.foo(1,2,3);
+
+// 4. 清除投送事件列表
+obj.OnDoing.clear();
+obj.foo(1,2,3);
+alert('none event hander!');
+
+// 5. 测试对实例对象(this)的识别
+// ( 能在句柄中识别不同的、正确的this对象:this.base )
+var obj2 = new MyObject(); 
+obj.OnDoing.add(Hander3);
+obj2.OnDoing.add(Hander3);
+obj.base = 10;
+obj2.base = 20;
+obj.foo(1,2,3);
+obj2.foo(1,2,3);
+
+// 6. 测试事件句柄的方法的效率
+// ( 多个对象使用同一个add/clear/...函数实例 )
+e1 = new MuEvent();
+e2 = new MuEvent();
+alert(e1.add === e2.add);  // ?!!
+
+// 7. 复核其它事件句柄实例的有效性
+// ( 多个对象使用同一个add/clear/...函数实例 )
+obj.foo(1,2,3);
+
+// 8. 复核事件对象的属性
+// ( 列举事件对象的属性列表 )
+document.writeln('<br><br>', 'MuEvent Object properties:', '<hr>')
+for (i in e2)
+  document.writeln(i, '<br>');
+
+// 8. 事件实现细节的限藏
+// ( 多投事件的方法细节被隐藏 )
+document.writeln('<br><br>', 'implement hidded:', '<hr><pre>');
+document.writeln(e2.add, '<br>');
+document.writeln(e2);
+document.writeln('</pre>');
+
+// 9. 关闭
+// ( 列举事件对象的属性列表 )
+e2.close();
+document.writeln('<br>', 'MuEvent Object closed, method list is null:', '<hr>')
+for (i in e2)
+  document.writeln(i, '<br>');
+</script>
+</BODY>
+</HTML>

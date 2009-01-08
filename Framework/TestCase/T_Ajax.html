@@ -1,0 +1,65 @@
+﻿<HTML>
+<HEAD>
+<TITLE>Qomo中的处理机与池化对象</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<script src="../../Qomo.js"></script>
+</HEAD>
+
+<body>
+<textarea id="txt" style="width:800px; height:600px">
+</textarea>
+</body>
+
+<script>
+
+function doAction(ord, idx, url, ctx) {
+  var txt = document.getElementById('txt');
+  var str = 'machie(%s) to process a url, index is %s\n\
+   - Url: %s \n\
+   - Length: %s \n\n';
+
+  txt.value += str.format(ord, idx, url, ctx.length);
+}
+
+function doStateChange(state) {
+  if (state != 4) return;  // wait downloaded.
+
+  var ajx = this.get('XMLHTTP');
+  if (ajx.status!=200 && ajx.status!=304 && ajx.status!=0) return;  // staus is failed.
+
+  doAction(this.order, this.data.index, this.data.src, ajx.responseText);
+}
+
+// 使用原型操作，为 Machine 个添加 order 属性
+//  (测试用)
+var idx_order = 1;
+HttpGetMachine.prototype.order = undefined;
+
+// 手动
+var ajx_1 = new HttpGetMachine();
+ajx_1.OnStateChange.add(doStateChange);
+ajx_1.data = { index: 'none', src: 'http://www.sina.com.cn/' };
+ajx_1.OnStateChange('resume');
+
+// 池化管理 - 创建处理池并填入数据
+function doOnStateChange_pool(mac, state) {
+  if (mac.order === undefined) mac.order = idx_order++;
+  doStateChange.call(mac, state);
+}
+var pool = new Pool(THttpGetMachine, 3);
+pool.OnStateChange.add(doOnStateChange_pool);
+
+// 池化管理 - 填入数据将被自动处理(测试用)
+var idx = 0;
+pool.push( { index: idx++, src: 'http://www.sina.com.cn/' } );
+pool.push( { index: idx++, src: 'http://www.snda.com.cn/' } );
+pool.push( { index: idx++, src: 'http://www.tom.com/' } );
+pool.push( { index: idx++, src: 'http://www.google.com/' } );
+pool.push( { index: idx++, src: 'http://bbs.kk.sdo.com/BoardViewTopic.aspx?BoardID=2' } );
+pool.push( { index: idx++, src: 'http://images.17173.com/news/000/20060807/s0829sun01.jpg' } );
+pool.push( { index: idx++, src: 'http://bbs.17173.com/topics/2909/200608/25/214202,1.html?time=1170219932' } );
+pool.push( { index: idx++, src: 'http://www.csdn.net/' } );
+
+</script>
+
+</HTML>

@@ -1,0 +1,59 @@
+﻿<script src='Qomo.js'></script>
+
+
+<script>
+
+// 以下的演示基于TObject进行. 包括:
+//   - 多个实例之间的关系
+//   - 类方法与对象方法
+//   - 原型的特性
+
+document.writeln('类的本质是函数(对象)<br>');
+document.writeln('typeof = ', typeof TObject);
+document.writeln('<pre>', TObject.toString(), '</pre>');
+
+document.writeln('<hr>','类成员(TObject)<br>')
+for (i in TObject) document.writeln(i, ': ', (TObject[i]) ? TObject[i].valueOf() : TObject[i], '<br>');
+
+document.writeln('<hr>', '复核类(new方法)构造的对象(o)的属性<br>')
+o = TObject.Create();
+for (i in o) document.writeln(i, ': ', (o[i]) ? o[i].valueOf() : o[i], '<br>');
+document.writeln(' - call toString(): ', o.toString(), '<br>');
+document.writeln(' - call valueOf(): ', o.valueOf(), '<br>');
+
+document.writeln('<hr>', '复核类(Create方法)构造的对象(o2)的属性<br>')
+o2 = new Object();
+for (i in o2) document.writeln(i, ': ', (o2[i]) ? o2[i].valueOf() : o2[i], '<br>');
+document.writeln(' - call toString(): ', o2.toString(), '<br>');
+document.writeln(' - call valueOf(): ', o2.valueOf(), '<br>');
+
+document.writeln('<hr>', '比较类对象(o)和(o2)的相似性<br>')
+document.writeln('是同一个构造函数吗：',o2.constructor == o.constructor, '<br>');
+document.writeln('是同一个对象实例吗：', o2.valueOf() == o.valueOf(), '<br>');
+document.writeln('原型的构造器(constructor)相同吗：', o2.constructor.prototype == o.constructor.prototype, '<br>');
+
+Object.prototype.xx = '4321';
+
+document.writeln('<hr>', '修改原型后, 复核构造产生的对象(o)的属性<br>')
+for (i in o) document.writeln(i, '<br>');
+
+document.writeln('<hr>', '修改原型后, 复核虚构造产生的对象(o2)的属性<br>')
+for (i in o2) document.writeln(i, '<br>');
+
+document.writeln('<hr>比较对象与类<br>')
+document.writeln('<hr>')
+document.writeln('基本对象与类都具有的方法和成员<br>')
+document.writeln(' - ClassInfo<br>')
+document.writeln(' - Create()<br>')
+
+document.writeln('仅类具有的方法和成员<br>')
+document.writeln(' - ClassParent<br>')
+document.writeln(' - ClassName<br>')
+document.writeln(' - SpaceName<br>')
+
+document.writeln('仅对象具有的方法和成员<br>')
+document.writeln(' - get()<br>')
+document.writeln(' - set()<br>')
+document.writeln(' - inherited()<br>')
+
+</script>

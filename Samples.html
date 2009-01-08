@@ -1,0 +1,117 @@
+﻿<HEAD>
+<TITLE>Qomo V2 Samples</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<script>
+function doSwitch(el) {
+  el.parentNode.parentNode.style.height = {'+' : '10em', '-' : 'auto'}[
+   el.innerHTML = (el.innerHTML == '+' ? '-':'+')
+  ];
+}
+
+/*
+window.onload = function() {
+  doSwitch(document.body.all.tags('FIELDSET')[2].children(0).children(0));
+}
+*/
+</script>
+<style>
+.case-box { height:10em; width:50%; overflow:hidden; }
+.case-box A{ text-decoration: none; }
+.case-box A:hover{ text-decoration: underline; }
+.case-box BUTTON{ width: 1.4em;  height: 1.4em; border: 1px solid gray; }
+
+.case-list { width: 100%; height: 100%; overflow-y:auto; }
+.case-list HR{ height: 1px; width: 20%; color: green; }
+.case-list I{ text-decoration: line-through; }
+
+.case-sec-title { padding-top: 0.5em; color: red; }
+</style>
+</HEAD>
+
+<body>
+<fieldset class="case-box"><legend>loader system</legend>
+	<div class="case-list">
+		<a href="Framework/Debug/TestCase/T_profiler.html">T_profiler.html</a><br>
+	</div>
+</fieldset><br><br>
+
+<fieldset class="case-box"><legend>builder system (<b style="color:red">IE only</b>)</legend>
+	<div class="case-list">
+		<a href="Build/TestCase/T_Builder.html">T_Builder.html</a><br>
+		<a href="Build/TestCase/T_Compress.html">T_Compress.html</a><br>
+		<a href="Build/TestCase/T_CustomBuilder.html">T_CustomBuilder.html</a><br>
+	</div>
+</fieldset><br><br>
+
+<fieldset class="case-box"><legend>TestCase RTL<button onclick="doSwitch(this);">+</button></legend>
+	<div class="case-list">
+		<a href="Framework/TestCase/AdvObjectDemo.html">AdvObjectDemo.html</a><br>
+		<a href="Framework/TestCase/AdvObjectDemo2.html">AdvObjectDemo2.html</a><br>
+		<a href="Framework/TestCase/AdvObjectDemo3.html">AdvObjectDemo3.html</a><br>
+		<a href="Framework/TestCase/AdvObjectDemo4.html">AdvObjectDemo4.html</a><br>
+		<a href="Framework/TestCase/AdvObjectDemo5.html">AdvObjectDemo5.html</a><br>
+		<a href="Framework/TestCase/AdvObjectDemo6.html">AdvObjectDemo6.html</a><br>
+		<a href="Framework/TestCase/BaseObjectDemo.html">BaseObjectDemo.html</a><br>
+		<a href="Framework/TestCase/BaseObjectDemo2.html">BaseObjectDemo2.html</a><br>
+		<a href="Framework/TestCase/BaseObjectDemo3.html">BaseObjectDemo3.html</a><br>
+		<a href="Framework/TestCase/BaseObjectDemo4.html">BaseObjectDemo4.html</a><br>
+		<a href="Framework/TestCase/BaseObjectDemo5.html">BaseObjectDemo5.html</a><br>
+		<a href="Framework/TestCase/T_Interface.html">T_Interface.html</a><br>
+		<a href="Framework/TestCase/T_InterfaceAggregate.html">T_InterfaceAggregate.html</a><br>
+		<a href="Framework/TestCase/T_InterfaceDelegate.html">T_InterfaceDelegate.html</a><br>
+		<a href="Framework/TestCase/T_InterfaceDelegateInherted.html">T_InterfaceDelegateInherted.html</a><br>
+		<a href="Framework/TestCase/T_InterfaceQuery.html">T_InterfaceQuery.html</a><br>
+
+<div class="case-sec-title">Browser framework</div>
+		<a href="Framework/TestCase/T_QomoConfig.html">T_QomoConfig.html</a><br>
+		<a href="Framework/TestCase/T_execScript.html">T_execScript.html</a><br>
+		<a href="Framework/TestCase/T_Import.html">T_Import.html</a><br>
+		<a href="Framework/TestCase/T_Import_UTF8.html">T_Import_UTF8.html</a><br>
+		<a href="Framework/TestCase/T_Namespace.html">T_Namespace.html</a><br>
+		<a href="Framework/TestCase/T_Ajax.html">T_Ajax.html</a><br>
+		<a href="Framework/TestCase/T_AjaxPriviledge(FF).html">(FF, )T_AjaxPriviledge.html</a><br>
+
+<div class="case-sec-title">JScript Only</div>
+		<a href="Framework/TestCase/T_JScriptVersion.html">T_JScriptVersion.html</a><br>
+		<a href="Framework/TestCase/T_ActiveScriptStatus.html">T_ActiveScriptStatus.html</a><br>
+		<a href="Framework/TestCase/T_DecodeUnicode.html">T_DecodeUnicode.html</a><br>
+<I>		<a href="Framework/TestCase/T_UnEval.html">T_UnEval.html</a><br></I>
+		<a href="Framework/TestCase/T_Apply.html">(IE5, )T_Apply.html</a><br>
+		<a href="Framework/TestCase/T_hasOwnProperty.html">(IE5, )T_hasOwnProperty.html</a><br>
+
+<div class="case-sec-title">Utilities or Classes</div>
+		<a href="Framework/TestCase/T_Enum.html">T_Enum.html</a><br>
+		<a href="Framework/TestCase/T_Etor.html">T_Etor.html</a><br>
+		<a href="Framework/TestCase/T_MuEvent.html">T_MuEvent.html</a><br>
+		<a href="Framework/TestCase/T_ParserLite.html">T_ParserLite.html</a><br>
+		<a href="Framework/TestCase/T_StringFormat.html">T_StringFormat.html</a><br>
+		<a href="Framework/TestCase/T_StringJoinSlot.html">T_StringJoinSlot.html</a><br>
+		<a href="Framework/TestCase/T_StringReplacePattern.html">T_StringReplacePattern.html</a><br>
+		<a href="Framework/TestCase/T_Timeline.html">T_Timeline.html</a><br>
+		<a href="Framework/TestCase/T_Timeline2.html">T_Timeline2.html</a><br>
+		<a href="Framework/TestCase/T_Timeline3.html">T_Timeline3.html</a><br>
+		<a href="Framework/TestCase/T_Url.html">T_Url.html</a><br>
+
+<div class="case-sec-title">Other(JS or Browser base)</div>
+		<a href="Framework/TestCase/T_BrowserDetect.html">T_BrowserDetect.html</a><br>
+		<a href="Framework/TestCase/T_ScriptEngine.html">T_ScriptEngine.html</a><br>
+		<a href="Framework/TestCase/T_CompareVersion.html">T_CompareVersion.html</a><br>
+		<a href="Framework/TestCase/T_eval.html">T_eval.html</a><br>
+		<a href="Framework/TestCase/T_Caller.html">T_Caller.html</a><br>
+		<a href="Framework/TestCase/t_Function.html">t_Function.html</a><br>
+		<a href="Framework/TestCase/T_FunctionScope.html">T_FunctionScope.html</a><br>
+		<a href="Framework/TestCase/T_HiddedProperties.html">T_HiddedProperties.html</a><br>
+		<a href="Framework/TestCase/T_instanceof.html">T_instanceof.html</a><br>
+		<a href="Framework/TestCase/T_RegExp.html">T_RegExp.html</a><br>
+	</div>
+</fieldset><br><br>
+
+<fieldset class="case-box"><legend>TestCase Component</legend>
+	<div class="case-list">
+		<a href="Components/Controls/TestCase/T_BaseComponent1.html">T_BaseComponent1.html</a><br>
+		<a href="Components/Controls/TestCase/T_BaseComponent2.html">T_BaseComponent2.html</a><br>
+		<a href="Components/Controls/TestCase/T_BaseComponent3.html">T_BaseComponent3.html</a><br>
+		<a href="Components/Controls/TestCase/T_HtmlController.html">T_HtmlController.html</a><br>
+	</div>
+</fieldset>
+</body>

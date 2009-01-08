@@ -1,0 +1,27 @@
+﻿<HEAD>
+<TITLE>Qomo中命名空间的使用</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<script src='Qomo.js'></script>
+</HEAD>
+
+
+<BODY>
+
+<script>
+
+function MyObject() {
+  this.getValue = function() {
+    return 10;
+  }
+  this.OnDoany = NullFunction;
+}
+TMyObject = Class(TObject, 'MyObject');
+
+var obj2 = Qomo.Thirdparty.TMyObject.Create();
+alert(TMyObject.SpaceName);
+alert(obj2.get('Value'));
+
+</script>
+
+</BODY>
+</HTML>

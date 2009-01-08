@@ -1,0 +1,20 @@
+﻿<script>
+function foo(v) {
+  alert(foo.caller);
+  alert(v);
+}
+
+function foo1() {
+  var a = 100;
+  eval('foo(a)');
+}
+
+function foo2() {
+  var a = 100;
+  f = new Function('foo(a);');
+  f();
+}
+
+foo1();
+foo2();
+</script>

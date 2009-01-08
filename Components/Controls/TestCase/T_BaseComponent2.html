@@ -1,0 +1,28 @@
+﻿<HTML>
+<HEAD>
+<TITLE>Base component framework - 2</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+</HEAD>
+
+<!-- load qomo -->
+<script src="../../../Qomo.js"></script>
+
+<body>
+  <fieldset id="edLabled">
+    <legend>pls input：</legend>
+    <input name="edit" value="...">
+  </fieldset>
+</body>
+
+<script src="LableEdit.js"></script>
+<script>
+// sub component struct same of the TLabledEdit
+//  - anonymous or null function
+TFieldSetEdit = Class(TLabledEdit, NullFunction); 
+
+var ed = TLabledEdit.Create('edLabled');
+alert(ed.get('LableText'));
+ed.set('LableText', 'my lable:');
+ed.set('Value', 'hello, world.');
+</script>
+</HTML>

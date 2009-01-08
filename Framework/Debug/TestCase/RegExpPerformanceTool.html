@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<HEAD>
+<TITLE>Regular Expressions test and performance tool</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<script src='../Dbg.Utils.js'></script>
+</HEAD>
+
+<body>
+<script>
+var $Go = false;
+
+function stop() {
+  $Go = false;
+}
+
+function performanceIt() {
+  var tags = [
+    document.getElementById('gTag').checked ? 'g' : '',
+    document.getElementById('mTag').checked ? 'm' : '',
+    document.getElementById('iTag').checked ? 'i' : ''
+  ].join('');
+  var pattern = document.getElementById('regexp').value;
+  var r = new RegExp(pattern, tags);
+  if (r.compile) r.compile(pattern, tags);
+  
+  var isTest = document.getElementById('tTag').checked;
+  var input = document.getElementById('context').value;
+  var msg = document.getElementById('message');
+  var times = document.getElementById('times').value;
+  var pers = document.getElementById('pers').value;
+
+  var d = new Date();
+  var t = 0;
+
+  function f_match() {
+    do {
+      input.match(r);
+    } while ($Go && t<times && ++t % pers);
+    msg.value = t;
+
+    if ($Go && t<times) {
+      setTimeout(arguments.callee, 0);
+    }
+    else {
+      msg.value = ((new Date - d) / t) + 'ms/time';
+      document.getElementById('perf').diabled = false;
+    }
+  }
+
+  function f_test() {
+    do {
+      r.test(input);
+    } while ($Go && t<times && ++t % pers);
+    msg.value = t;
+
+    if ($Go && t<times) {
+      setTimeout(arguments.callee, 0);
+    }
+    else {
+      msg.value = ((new Date - d) / t) + 'ms/time';
+      document.getElementById('perf').diabled = false;
+    }
+  }
+
+  $Go = true;
+  setTimeout(isTest ? f_test : f_match, 0);
+  document.getElementById('perf').diabled = true;
+}
+</script>
+
+<div style="border:1px solid gray;padding:10px;width:782px;margin-bottom:5px">
+Times:<input id="times" value=100><select id="pers">
+<option value="1">1
+<option value="10" selected>10
+<option value="50">50
+<option value="100">100
+<option value="300">300
+<option value="500">500
+<option value="1000">1000
+<option value="3000">3000
+<option value="5000">5000
+<option value="10000">10000
+<option value="30000">30000
+<option value="50000">50000
+<option value="100000">100000
+<option value="500000">500000
+<option value="1000000">1000000
+</select>
+Info:<input id="message">
+<input type="checkbox" id="gTag" checked disabled>Global
+<input type="checkbox" id="mTag">MutilLine
+<input type="checkbox" id="iTag">IgnoreCase
+<input type="checkbox" id="tTag">Test?<br>
+RegEx:<input id="regexp" style="width:550px">
+<button id="perf" onclick="performanceIt()">Performance It</button>&nbsp;
+<button onclick="stop()">Stop</button>
+</div>
+
+<textarea id="context" style="width:800px;height:600px">
+================================================================================
+Qomolangma OpenProject v2.0
+
+
+Class   : Rich Web Client
+keyword : JS OOP, JS Framwork, Rich Web Client, RIA, Web Component, 
+          DOM, DTHML, CSS, JavaScript, JScript
+
+Manager : aimingoo (aim@263.net)
+Team    : aimingoo, Zhe(fangzhe@msn.com)
+thank   : Leon(pfzhou@gmail.com), JingYu(zjy@cnpack.org)
+================================================================================
+
+Qomo OpenProject is a True OOP framework(with namespace,SOA,ajax,templet...) and
+UI Library base Web Borowser. the project extracted from a enterprise project.
+free and open source for all JavaScript fans, and hope anybody join/impulse the
+project.
+
+{ note:  # implemented,  + implementing, * planning, - tring }
+include features of OOP:
+ # inhreited by class
+ # attribute getter/setter
+ # type system of object
+ # abstract and abstract exception
+ # mutilcast event
+ # interface in javascript
+ # namespace system
+ # package/unit import
+ # tiny ajax architecture 
+ # SOA Architecture
+ # template programming
+ - more...
+
+include features of UI:
+ # tidy component framework
+ # graphics abstract level and a VML implement
+ * database abstract level and a ArrayDB/FileDB implement
+ * html element controller and some control component
+ * bar, menu, window, etc. in virsual component library.
+ * more component, mount a tidy(very very) FCL or VCL.
+ - more ...
+
+other features:
+ # some utils class.
+ # auto class inhnert chart scan and generable
+ * document generable tool (C# source)
+ # testing and profing tools (JavaScript Source)
+ - OOP Core and UI can debugging and designing in VS.NET IDE.
+ - more ...
+
+the project extracted from a enterprise project. free and open source for all
+JavaScript fans, and hope anybody join/impulse the project.
+
+
+==============
+web site          : http://sourceforge.net/projects/qomo/
+project manager   : aim@263.net
+developer team    : aim@263.net, fangzhe@msn.com
+enterprise support: (chinese only) http://www.jxsoft.net/
+</textarea>
+
+</body>

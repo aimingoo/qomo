@@ -1,0 +1,17 @@
+﻿<HEAD>
+<TITLE>Qomo中的模板的基本使用</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<script src='Qomo2.js'></script>
+</HEAD>
+
+<BODY>
+<div id='elem' class="myClass">hello, world!</div>
+</BODY>
+
+<script>
+var ctrl = new HtmlController('elem');
+var temp = new ComponentTemplet(ctrl);
+alert(temp);
+</script>
+
+</HTML>

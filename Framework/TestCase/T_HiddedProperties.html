@@ -1,0 +1,20 @@
+﻿<script>
+
+function foo() {
+}
+
+document.writeln('test 1:', '<HR>');
+for (var i in foo) document.writeln(i, '<BR>');
+document.writeln(foo.toString());
+
+
+var obj = new foo();
+document.writeln('<BR><BR>', 'test 2:', '<HR>');
+for (var i in obj) document.writeln(i, '<BR>');
+
+foo.toString = foo.toString;
+document.writeln('<BR><BR>', 'test 3:', '<HR>');
+for (var i in foo) document.writeln(i, '<BR>');
+document.writeln(foo.toString(), '<BR>');
+
+</script>

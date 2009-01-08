@@ -1,0 +1,42 @@
+<script>
+// enable priviledge and try callback, valid in this context only.
+//  - if invalid, throw a exception.
+applyPriviledge = function(priviledge, callback) {
+  try {
+    netscape.security.PrivilegeManager.enablePrivilege(priviledge);
+  }
+  catch (ex) { /* eat it */ }
+
+  callback();
+}
+
+function xmlhttpChange() {
+  alert(xmlhttp.readyState);
+}
+
+var url = "http://www.sina.com.cn/";
+xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = xmlhttpChange;
+
+void function(ajx) {
+  // code in Framework/Compat/common_moz1801.js
+  var open = ajx.open;
+  ajx.open = function() {
+    try{
+    	open.apply(this, arguments)
+    }
+    catch (e) {
+      var ajx = this, args = arguments;
+      applyPriviledge('UniversalBrowserRead', function() {
+        open.apply(ajx, args);
+      });
+    }
+  }
+}(xmlhttp);
+
+//applyPriviledge('UniversalBrowserRead', function() {
+  xmlhttp.open("GET", url, true)
+  xmlhttp.send(null)
+//});
+
+</script>

@@ -1,0 +1,21 @@
+﻿<HEAD>
+<TITLE>Qomo中调试单元的使用示例2</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<script src='../Dbg.Utils.js'></script>
+</HEAD>
+
+
+<BODY>
+<BUTTON onclick="doTest()">测试</BUTTON><BR>
+<TEXTAREA id="ctx" style="width: 800px; height:500px">
+a = a/ab()/acd;
+</TEXTAREA>
+</BODY>
+
+<script>
+function doTest() {
+  with (document.getElementById('ctx')) {
+    value = getAllFunctions(value).join('\n')
+  }
+}
+</script>

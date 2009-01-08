@@ -1,0 +1,23 @@
+﻿<script>
+//var agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.2; zh-CN; rv:1.7.12) Gecko/20050919 Firefox/1.0.7';
+var agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.2; zh-CN; rv:1.8rc1.10) Gecko/20050919 Firefox/1.0.7';
+var r_gecko = /rv:([\d|\+.]+)/;
+r_gecko.exec(agent);
+
+var v1 = RegExp.$1;
+var v2 = '1.8.1.1';
+function checkit(v1, v2) {
+  var a1=v1.split(/\D*\.0*/), a2=v2.split(/\D*\.0*/);
+alert(a1);
+alert(a2);
+  var len=Math.min(a1.length, a2.length);
+  for (var i=0; i<len; i++) {
+    if (a1[i]!=a2[i]) return (a1[i]-a2[i] > 0 ? 1 : -1)
+  }
+
+  if (a1.length == a2.length) return 0;
+  return (a2.length == len ? 1 : -1)
+}
+
+alert(checkit(v1, v2));
+</script>

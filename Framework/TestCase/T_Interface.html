@@ -1,0 +1,41 @@
+﻿<script src="../../Qomo.js"></script>
+
+<script>
+IMyObject = function() {
+  this.getName =
+  this.getValue =
+  this.getState =
+  this.setValue = Abstract;
+}
+
+function MyObject() {
+  Attribute(this, 'Value', 100)
+
+  this.getName = function() {
+    return 'myName';
+  }
+
+  this.setValue = function(v) {
+    this.set(v * 2);
+  }
+
+  this.Create = function() {
+    // the method isn't attribute get/setter.
+    this.getState = function() {
+      return 'Ok.';
+    }
+  }
+}
+TMyObject = Class(TObject, 'MyObject', IMyObject);
+
+var obj = new MyObject();
+var intf = QueryInterface(obj, IMyObject);
+alert(intf.getName());
+alert(intf.getState());
+alert(intf.getValue());       // default getter/setter
+alert(intf.setValue('500'));  // return undefined
+alert(intf.getValue());       // change to 1000
+
+var intf2 = QueryInterface(obj, IAttributer);
+alert(intf2.get('Name'));
+</script>

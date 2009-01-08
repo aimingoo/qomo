@@ -1,0 +1,115 @@
+﻿<script src='Qomo.js'></script>
+
+
+<script>
+
+// 以下的演示基于TObject进行. 包括:
+//   - 类声明, 构造
+//   - 特性(attribute)的声明与使用
+//  _invalid_attrName = ['inherited', 'get', 'set'];
+
+// 1. 真实的MyObject总是在Class()的上下文中被调用
+// 2. 在MyObject中，this.Create()之外的代码事实上只被调用一次。调用时，this指向所有对象实例的原型
+// 3. this.Create()在每一个实例被创建时，都会被调用, 且this指向实例
+function MyObject() {
+  // 特性的快速声明
+  Attribute(this, 'Value', 3, 'rw');
+  Attribute(this, 'Data', 300, 'r');
+  Attribute(this, 'Str', 300, 'r');
+  this.setStr = Abstract;
+
+  // getter
+  this.getName = function(){
+    if (this.get() < 100) {
+      // 在getter中调用setter
+      this.set(100);
+    }
+    // 调用内部的getter
+    return this.get();
+  }
+
+  // setter
+  this.setName = function(v){
+    v++;
+    // 调用内部的setter
+    this.set(v);
+  }
+
+  this.Create = function() {
+    // 对象构造周期
+  }
+}
+TMyObject = Class(TObject, 'MyObject');
+
+obj = new MyObject()
+obj.set('Name', 20);
+
+alert(obj.get('Name'));
+
+alert(obj.get('Value'));
+obj.set('Value', 3*10);
+alert(obj.get('Value'));
+
+obj2 = new MyObject()
+obj2.set('Name', 1000);
+alert(obj2.get('Name'));
+alert(obj.get('Name'));
+
+// Data特性是不可写的，因此下面的代码将出错
+// obj2.set('Data', 1000);
+
+
+// 子类对父类的Attribute的理解
+function MyObjectEx() {
+  // 1. 子类可以重置读写属性
+  Attribute(this, 'Data', 300, 'rw');
+
+  // 2. 子类可重写读写器
+  // (* 重写读写器同时会开启相应的读写属性 *)
+  this.setStr = function(value) {
+    this.set(value);
+  }
+}
+TMyObjectEx = Class(TMyObject, 'MyObjectEx');
+
+var objex = new MyObjectEx();
+objex.set('Str', 'hello.');
+alert(objex.get('Str'));
+
+
+// attribute tag ext:
+//   - ''  : can't get/set
+//   - 'p' : protected get&set
+//   - 'r' : get only
+//   - 'w' : set only
+//   - 'rw' : get&set
+//   - 'pr' : protected set, and get open
+//   - 'pw' : protected get, and set open
+//   - 'rp'/'wp' : equ 'p'
+function MyObjectEx2() {
+  Attribute(this, 'Data', null, 'p');
+
+  this.getName = function() {
+    return this.get('Data');
+  }
+
+  this.show = function() {
+    alert(this.get('Data'));
+  }
+
+  this.Create = function() {
+    this.set('Data', 'hello');
+  }
+}
+TMyObjectEx2 = Class('MyObjectEx2');
+
+var objex2 = new MyObjectEx2();
+objex2.show();
+alert(objex2.get('Name'));
+
+// 列出对象属性
+for (i in obj) {
+  document.writeln(i, '<BR>');
+}
+
+</script>

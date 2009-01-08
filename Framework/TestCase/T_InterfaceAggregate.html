@@ -1,0 +1,40 @@
+﻿<script src="../RTL/Interface.js"></script>
+
+<script>
+IMyFunc = function() {
+  this.getValue = Abstract;
+  this.run = Abstract;
+}
+
+IMyFunc2 = function() {
+  this.run = Abstract;
+}
+
+MyFunction = function () {
+  function _MyFunction() {
+    // do more...
+  }
+
+  // 内聚接口的实现代码
+  var data = 10;
+  var getValue = function() {
+    return 100;
+  }
+  function run () {
+    return data * getValue();
+  }
+
+  // 注册(内部)聚合接口
+  var intfs = Aggregate(_MyFunction, IMyFunc, IMyFunc2);
+  // 初始化或实现聚合接口
+  var intf = intfs.GetInterface(IMyFunc);
+  intf.getValue = getValue;
+  intf.run = run;
+
+  // 返回实际代码
+  return _MyFunction;
+}();
+
+intf = QueryInterface(MyFunction, IMyFunc);
+alert(intf.run());
+</script>

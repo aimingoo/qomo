@@ -1,0 +1,66 @@
+﻿<HTML>
+<HEAD>
+<TITLE>时间线(Timeline)示例</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<script src="../../Qomo.Config.js"></script>
+<script>
+$QomoConfig.set('Profiling', true);
+$QomoConfig.set('Aspect', true);
+$QomoConfig.set('CommonClasses', true);
+</script>
+<script src="../../Qomo.js"></script>
+</HEAD>
+
+<BODY>
+<style>
+#dot {
+ left: 20px;
+ top: 20px;
+ width: 10px;
+ height: 10px;
+ position: absolute;
+ font-size: 1px;
+ background-color: red;
+}
+</style>
+<span id="dot"></span>
+</BODY>
+
+<script src="drawLine_full.js"></script>
+<script>
+// 调试输出
+$debug.resetTo(function() {
+  arguments.join = Array.prototype.join;
+  document.body.insertAdjacentHTML('beforeEnd', arguments.join('')+'<br>');
+});
+
+var el = document.getElementById('dot');
+var x0 = el.offsetLeft, x1 = 400;
+
+// 1. 构造一个时钟及其处理程序
+var doFly = function(step, data) {
+  var sty = this.get('TimerData').style;
+  sty.left = data;
+}
+var T2 = TTimeline.Create(doFly);
+T2.set('TimerData', el);
+
+// 2. 构建一个数据发生器, 用于向时钟提供数据
+provide = TYuiSteper.Create();
+provide.set('From', x0);
+provide.set('To', x1);
+
+// 3. 使用切面来观察绘制过程
+var asp_OnTimer = new ObjectAspect(T2, 'OnTimer', 'Event', x0); //push a meta_data
+var y = el.offsetTop;
+asp_OnTimer.OnAfter.add(function(o, n, p, a, v) {
+  var data = a[1], x = this.get('MetaData')[0];
+  drawLine(x, y, data, y, 'red', 1, 0);
+  this.set('MetaData', [data]);
+  $debug(a[0], ':', data);
+});
+
+// 5. 启动时钟
+T2.start(provide, 1);
+</script>
+</HTML>

@@ -1,0 +1,25 @@
+﻿<HEAD>
+<TITLE>命名空间与别名系统</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<script src="../../Qomo.js"></script>
+</HEAD>
+
+<BODY>
+<script>
+url = new Url('http://sourceforge.net/project/showfiles.php/list?group_id=157100');
+//url = Url;
+//url.parse('http://blog.csdn.net/aimingoo/archive/2006/02/13/597658.aspx');
+document.writeln('<pre>');
+for (i in url) document.writeln(i, ': ', url[i], '');
+document.writeln('</pre>');
+
+var
+  rtl_alias = Qomo.RTL;
+  rtl_path = $n2p(rtl_alias);
+  rtl_name = $p2n(rtl_path);
+document.writeln('<hr>');
+document.writeln('alias: ', rtl_alias, '<br>');
+document.writeln('path: ', rtl_path, '<br>');
+document.writeln('name: ', rtl_name);
+</script>
+</BODY>

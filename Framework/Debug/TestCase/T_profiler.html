@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<HEAD>
+<TITLE>Qomo中调试单元的使用示例</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<script src='../../../Qomo.Config.js'></script>
+
+<script>
+$QomoConfig.set('Profiling', true);
+$QomoConfig.set('RepImport', true);
+
+$QomoConfig.set('IeAabsolutePath', true);
+$QomoConfig.set('Interface', true);  // * 依赖项
+$QomoConfig.set('Error', true);
+$QomoConfig.set('Protocol', true);   // * 依赖项
+$QomoConfig.set('CompatLayer', true);
+$QomoConfig.set('Namespace', true);
+$QomoConfig.set('CommonClasses', true);
+$QomoConfig.set('Aspect', true);
+$QomoConfig.set('Templet', true);    // * 依赖项
+$QomoConfig.set('Database', true);
+$QomoConfig.set('Graphics', true);
+$QomoConfig.set('Controls', true);
+</script>
+
+<script src='../../../Qomo.js'></script>
+<!--
+<script src='Qomo.js'></script>
+<script>
+  // import anything
+  $Q  = $QomoConfig = new Function('return true');
+</script>
+-->
+<script src='AOP_MyProf.js'></script>
+
+<!-- default loaded in qomo v2.1
+<script language="JavaScript1.5">$import.setActiveUrl("../../../Components/Components.js");</script>
+<script src='../../../Components/Components.js'></script>
+--> 
+</HEAD>
+
+<BODY>
+<link rel="stylesheet" href="../Profilers.Report.css">
+<style>
+.fd5 {
+ overflow: visible;
+}
+
+#CodeBox {
+ width: 1024px;
+ height: 768px;
+}
+</style>
+
+<script>
+$debug.resetTo(function() {
+  arguments.join = Array.prototype.join;
+  document.writeln(arguments.join(''));
+});
+
+showProfiler($profilers);
+
+if (typeof $builder != 'undefined') {
+  document.writeln('<textarea id=CodeBox>');
+  document.writeln($builder.finish());
+  document.writeln('<', '/textarea>');
+}
+</script>
+</BODY>
+</HTML>

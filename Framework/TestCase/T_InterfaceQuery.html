@@ -1,0 +1,35 @@
+﻿<script>
+var
+  ECallAbstract = [8103, 'Call Abstract Method.'];
+
+Abstract = function() {
+  throw new Error(ECallAbstract)
+}
+
+IMyObject = function() {
+  this.method = Abstract;
+}
+
+function MyObject() {
+  var data = 100;
+  this.value = 10;
+  this.method = function() {
+    return data * this.value;
+  }
+}
+
+function QueryInterface(obj, intf) {
+  var f = new intf();
+  var p = obj;
+  var slot = ['f["', , '"]=function(){return p["', ,'"].apply(p, arguments)}'];
+  for (var i in f) {
+    slot[1] = slot[3] = i;
+    eval(slot.join(''));
+  }
+  return f;
+}
+
+var obj = new MyObject();
+var intf = QueryInterface(obj, IMyObject);
+alert(intf.method());
+</script>

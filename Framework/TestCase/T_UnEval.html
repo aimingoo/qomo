@@ -1,0 +1,34 @@
+﻿<script>
+function store(value,filename){   
+  var fso=new ActiveXObject('Scripting.FileSystemObject');   
+  var f=fso.OpenTextFile(filename,2/*ForWriting*/,true);   
+  f.WriteLine(uneval(value));   
+  if(__TC__)   
+  {   if(!Files.ContainsFile(filename))   
+      Files.Add(fso.GetAbsolutePathName(filename),filename);   
+  };   
+  f.Close();   
+}   
+function retrieve(filename){   
+  var fso=new ActiveXObject('Scripting.FileSystemObject');   
+  try{   
+    var f=fso.OpenTextFile(filename,1/*ForReading*/,false);   
+    if(__TC__)   
+    {   if(!Files.ContainsFile(filename))   
+        Files.Add(fso.GetAbsolutePathName(filename),filename);   
+    };   
+    var value=f.AtEndOfStream?'new Object()':f.ReadAll();   
+    f.Close();   
+    try{     
+      eval('value='+value);///isn't eval evil here?   
+    }   
+    catch(e){   
+      value={};   
+    };   
+  }   
+  catch(e){   
+    value={};   
+  };   
+  return value;   
+}   
+</script>

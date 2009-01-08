@@ -1,0 +1,55 @@
+﻿<HTML>
+<HEAD>
+<TITLE>Qomo中的处理机与池化对象</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<script src="../../Qomo.js"></script>
+</HEAD>
+
+<body>
+<textarea id="txt" style="width:800px; height:600px">
+</textarea>
+</body>
+
+<script>
+
+function doAction(ord, url, ctx) {
+  var txt = document.getElementById('txt');
+  var str = 'machie(%s) to process a url\n\
+   - Url: %s \n\
+   - Length: %s \n\n';
+
+  txt.value += str.format(ord, url, ctx.length);
+}
+
+function doStateChange(state) {
+  if (state != 4) return;  // wait downloaded.
+
+  var ajx = this.get('XMLHTTP');
+  if (ajx.status!=200 && ajx.status!=304 && ajx.status!=0) return;  // staus is failed.
+
+  doAction(this.id, this.data.src, ajx.responseText);
+}
+
+// 池化管理 - 创建处理池并填入数据
+//  - id仅用于识别在处理中的mac序号，不是必须的
+var id = 1;
+function doOnStateChange_pool(mac, state) {
+  if (!mac.id) mac.id = id++; // 为machine做一个标识
+  doStateChange.call(mac, state);
+}
+
+var pool = new Pool(THttpGetMachine, 3);
+pool.OnStateChange.add(doOnStateChange_pool);
+
+pool.push( { src: 'http://www.sina.com.cn/' } );
+pool.push( { src: 'http://www.snda.com.cn/' } );
+pool.push( { src: 'http://www.tom.com/' } );
+pool.push( { src: 'http://www.google.com/' } );
+pool.push( { src: 'http://bbs.kk.sdo.com/BoardViewTopic.aspx?BoardID=2' } );
+pool.push( { src: 'http://images.17173.com/news/000/20060807/s0829sun01.jpg' } );
+pool.push( { src: 'http://bbs.17173.com/topics/2909/200608/25/214202,1.html?time=1170219932' } );
+pool.push( { src: 'http://www.csdn.net/' } );
+
+</script>
+
+</HTML>

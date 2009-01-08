@@ -1,0 +1,42 @@
+<!-- script src="../RTL/Interface.js"></script -->
+<script src="../../Qomo.js"></script>
+
+<script>
+IMyIntf = function() {
+  this.doAction1 = 
+  this.doAction2 = Abstract;
+}
+
+function MyObject() {
+  Delegate(_cls().Create, [
+   [{
+     doAction1: function() { alert('doAction1') },
+     doAction2: function() { alert('doAction2') }
+    }, ['IMyIntf']]
+  ]);
+}
+
+function MyObjectEx(){
+  Delegate(_cls().Create, [
+   [{
+     doAction2: function() { alert('doAction2 - MyObjectEx') }
+    }, ['IMyIntf.doAction2']]
+  ]);
+}
+
+TMyObject = Class(TObject, 'MyObject', IMyIntf);
+TMyObjectEx = Class(TMyObject, 'MyObjectEx');
+
+
+// test
+obj1 = new MyObject();
+obj2 = new MyObjectEx();
+
+intf1 = QueryInterface(obj1, IMyIntf);
+intf2 = QueryInterface(obj2, IMyIntf);
+
+intf1.doAction1();
+intf1.doAction2();
+intf2.doAction1();
+intf2.doAction2();
+</script>

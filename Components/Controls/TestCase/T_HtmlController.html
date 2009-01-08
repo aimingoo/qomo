@@ -1,0 +1,16 @@
+<HTML>
+<HEAD>
+<TITLE>Html controller utility class</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+</HEAD>
+
+<body>
+  <input id="pwd" value="my password in here">
+</body>
+
+<script src="../../../Qomo.js"></script>
+<script>
+var el = THtmlController.Create('pwd');
+alert(el.get('value'));
+</script>
+</HTML>

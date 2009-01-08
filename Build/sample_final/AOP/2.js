@@ -1,0 +1,1 @@
+﻿document.writeln('hi2', '<BR>');

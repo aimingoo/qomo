@@ -1,0 +1,63 @@
+﻿<script>
+var props = ['$0','$1','$2','$3','$4','$5','$6','$7','$8','$9','$10','$11',  // and more...
+ "$_", "$&","$+","$`","$'",
+ 'input', 'index', 'lastIndex', 'lastMatch', 'lastParen', 'leftContext', 'rightContext'];
+
+var r = /(.)(.)(.)(.)(.)(.)(.)(.)(.)(.)/;  // 10 chars
+r.exec('123456789A...');
+
+document.writeln('<HR>', 'RegExp lost properties: ', '<BR>');
+for (var i=0; i<props.length; i++) {
+  if (typeof RegExp[props[i]] !== 'undefined')
+    document.writeln('RegExp.', props[i], '=', RegExp[props[i]], '<BR>');
+  else
+    document.writeln('RegExp.', props[i], ' none'.fontcolor('red'), '<BR>');
+}
+
+document.writeln('<HR>', 'r lost properties: ', '<BR>');
+for (var i=0; i<props.length; i++) {
+  if (typeof r[props[i]] !== 'undefined')
+    document.writeln('r.', props[i], '=', r[props[i]], '<BR>');
+  else
+    document.writeln('r.', props[i], ' none'.fontcolor('red'), '<BR>');
+}
+
+var r2 = /(.)(.)(.)/;  // 3 chars;
+r2.exec('123456789A...');
+
+document.writeln('<HR>', '(for r2, )RegExp lost properties: ', '<BR>');
+for (var i=0; i<props.length; i++) {
+  if (typeof RegExp[props[i]] !== 'undefined')
+    document.writeln('RegExp.', props[i], '=', RegExp[props[i]], '<BR>');
+  else
+    document.writeln('RegExp.', props[i], ' none'.fontcolor('red'), '<BR>');
+}
+
+
+// 1. 支持在replace里使用子表达式
+alert('a1b2c3d4'.replace(/(.)(.)/g, '$2$1'));
+
+alert('a1b2c3d4'.replace(/(.)(.)/g, function($0, $1, $2){
+ return $2+$1;
+}));
+
+
+// 2. RegExp.lastIndex的使用
+// 如果为正则表达式设置了全局标志，则 exec 从 lastIndex 值指示的位置开始搜索字符串。
+// 如果没有设置全局标志，则 exec 忽略 lastIndex 的值，从字符串的起始位置开始搜索。
+var r = /../g;
+s = 'aabbccdd';
+
+r.exec(s);
+alert([RegExp.index, RegExp.lastIndex, r.lastIndex]);
+
+r.exec(s);
+alert([RegExp.index, RegExp.lastIndex, r.lastIndex]);
+
+
+// 3. replace()在ff和opera里的bug
+var v1 = "$from$";
+var v2 = "'txt=$to$';";
+alert(v1.replace("$from$", v2));
+
+</script>

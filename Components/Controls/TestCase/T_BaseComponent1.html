@@ -1,0 +1,23 @@
+<HTML>
+<HEAD>
+<TITLE>Base component framework - 3</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+</HEAD>
+
+<!-- load qomo -->
+<script src="../../../Qomo.js"></script>
+
+<body>
+  <div id="edLabled"><span>hello, TLabledEdit.</span><br>
+    <input name="edit" value="...">
+  </div>
+</body>
+
+<script src="LableEdit.js"></script>
+<script>
+var ed = TLabledEdit.Create('edLabled');
+alert(ed.get('LableText'));
+ed.set('LableText', 'my lable:');
+ed.set('Value', 'hello, world.');
+</script>
+</HTML>

@@ -1,0 +1,24 @@
+<script>
+var
+  versions = ['The browser support:'];
+for (var str='',i=10; i<=30; i+=1) {
+  var v = i.toString().split('').join('.');
+  str += [
+    '<script ',
+/*
+    'type="text/javascript',
+    v,
+    '" ',
+*/
+    'language="JavaScript',
+    v,
+    '"',
+    '>versions[versions.length] = ',
+    v,
+    ';<',
+    '/script>\n\r'].join('');
+}
+str += '<script>document.writeln(versions.join("<br>"));<' + '/script>';
+//alert(str);
+document.writeln(str);
+</script>

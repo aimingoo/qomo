@@ -1,0 +1,29 @@
+﻿<script src="../../../Qomo.js"></script>
+<script src="../StdPatterns.js"></script>
+
+<script>
+// 0. product interface
+IMyProduct = function() {
+  this.show = Abstract;
+}
+
+// 1. creator class
+function MyCreator() {
+  this.show = function() {
+    alert('a Product.');
+  }
+}
+TMyCreator = Class(TObject, 'MyCreator', IMyProduct);
+
+var creator = TMyCreator;
+var intf = QueryInterface(creator, ICreator);
+
+// 2. test：use instance method
+var product = intf.Create();
+product.show();
+
+// 3. test：use interface method
+intf = QueryInterface(product, IMyProduct);
+intf.show();
+
+</script>

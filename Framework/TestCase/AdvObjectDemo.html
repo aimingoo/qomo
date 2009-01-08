@@ -1,0 +1,46 @@
+﻿<HEAD>
+<TITLE>Qomo中对象接口系统的使用</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<script src="../../Qomo.js"></script>
+</HEAD>
+
+
+<BODY>
+
+<script>
+IMyObject = function() {
+  this.GetValue = Abstract;
+}
+
+IFail = function() {
+  // 未注册的接口, 将不被识别
+}
+
+function MyObject() {
+  var data = 10;
+  this.GetValue = function() {
+    return data;
+  }
+}
+TMyObject = Class(TObject, 'MyObject', IMyObject);
+
+var obj = TMyObject.Create();
+
+// 该对象已注册接口
+var intf = Interface.QueryInterface(obj, IMyObject);
+alert(intf.GetValue());
+
+// 未注册到该对象的接口
+// (* IClassRegister是Class()函数注册的, 而IClass是为每一个类类型自动注册的 )
+var intf = Interface.QueryInterface(Class, IClassRegister);
+alert(intf.hasClass('TMyObject'));
+
+// 是接口
+alert(Interface.IsInterface(IClass));
+
+// 非接口
+alert(Interface.IsInterface(IFail));
+</script>
+
+</BODY>
+</HTML>

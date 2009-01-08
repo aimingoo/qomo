@@ -1,0 +1,57 @@
+﻿<script src="../../Qomo.Config.js"></script>
+<script src="../../Qomo.js"></script>
+
+
+<pre>
+<script>
+function MyObject() {
+  // 声明特性并置初值
+  _set('Value', 10);
+
+  // 在reader函数中, 可以使用this.get()来获取实际属性值
+  this.getValue = function() {
+    return this.get();
+  }
+
+  // 在writer函数中，可以使用this.set()来置属性值
+  this.setValue = function(v) {
+    this.set(v);
+  }
+}
+TMyObject = Class(TObject, 'MyObject');
+
+function MyObject2() {
+  _set('Done', true);
+  this.getDone = function () {
+    return this.get();
+  }
+  this.setDone = function (v) {
+    this.set(v);
+  }
+}
+TMyObject2 = Class(TMyObject, 'MyObject2');
+
+var
+  v = 1234;
+  obj = TMyObject2.Create();
+  obj2 = TMyObject2.Create();
+
+document.writeln('一、对象特性的get/set方法有效性<hr>');
+
+document.writeln('取初值(Done): ', obj.get('Done'));
+document.writeln('取初值(Value): ', obj.get('Value'));
+document.writeln();
+
+obj.set('Done', v);
+document.writeln('attr_Done置值到: ', v);
+document.writeln('attr_Done复核值(obj): ', obj.get('Done'));
+document.writeln('attr_Done复核值(obj2): ', obj2.get('Done'));
+document.writeln();
+
+obj.set('Value', v*100);
+document.writeln('attr_Value置值到: ', v*100);
+document.writeln('attr_Value复核值(obj): ', obj.get('Value'));
+document.writeln('attr_Value复核值(obj2): ', obj2.get('Value'));
+document.writeln();
+</script>
+</pre>

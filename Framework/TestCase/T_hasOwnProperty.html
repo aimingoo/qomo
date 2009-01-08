@@ -1,0 +1,35 @@
+﻿<script>
+// disable import more
+$import = function() { };
+</script>
+
+<!-- compat ie5.x with apply/call>
+<script src="../Compat/common_ie5.js"></script -->
+
+<script>
+function MyObject() {
+  this.name = 'name';
+}
+MyObject.prototype.value = 1234;
+
+obj = new MyObject();
+
+// rewrite same value, can't check in compat. :(
+// becase compat diff value, but engine check write-action
+obj.value = 1234;
+
+alert(obj.hasOwnProperty('name'));  // true
+alert(obj.hasOwnProperty('value'));  // true
+
+
+function MyObjectEx() {
+}
+MyObjectEx.prototype = {
+  value: 1,
+  constructor: MyObjectEx
+}
+
+obj2 = new MyObjectEx();
+alert(obj2.hasOwnProperty('value'));
+
+</script>

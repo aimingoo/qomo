@@ -1,0 +1,54 @@
+﻿<HEAD>
+<TITLE>Qomo中AOP的合并与联合的示例</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<script src='Qomo2.js'></script>
+<script language="JavaScript1.5">$import.setActiveUrl(document.location.href);</script>
+</HEAD>
+
+
+<BODY>
+<script>
+function MyObjectEx1() { }
+function MyObjectEx2() { }
+function MyObject () {
+  this.getValue = function () {
+    return 100;
+  }
+  this.run = function() {
+    alert(this.get('Value'));
+  }
+}
+TMyObject = Class(TObject, 'MyObject');
+
+var obj = new MyObject();
+var A1 = new ObjectAspect(obj, 'Value', 'AttrGetter');
+var A2 = new ClassAspect(TMyObject, 'run', 'Method');
+var A3 = new CustomAspect(Class, 'a_custom_aspect', 'Initializtion');
+var A4 = new FunctionAspect($import, '$import', 'Function');
+
+
+A1.OnBefore.add(function(o, n, p, a) {
+  document.writeln('Before: ', n, '<br>');
+});
+
+A2.OnAfter.add(function(o, n, p, a) {
+  document.writeln('After: ', n, '<br>');
+});
+
+// 测试1
+document.writeln('切面的合并与联合<hr>');
+A1.merge(A2, A3, A4);
+TMyObjectEx1 = Class(TMyObject, 'MyObjectEx1');
+obj.run();
+$import('2.js');
+A1.unmerge();
+
+// 测试2
+document.writeln('<hr>');
+A1.combine(A2, A3, A4);
+TMyObjectEx2 = Class(TMyObject, 'MyObjectEx2');
+obj.run();
+$import('2.js');
+</script>
+</BODY>
+</HTML>

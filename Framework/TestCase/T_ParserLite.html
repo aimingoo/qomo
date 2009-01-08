@@ -1,0 +1,39 @@
+﻿<script src="../../Qomo.js"></script>
+<script language="JavaScript1.5">$import.setActiveUrl("../Common/ParserLite.js");</script>
+<script src="../Common/ParserLite.js"></script>
+
+<script language="JavaScript1.5">$import.setActiveUrl(window.location.href);</script>
+<script>
+function getEnumValue(obj, name, key) {
+  // if (!(obj instanceof Node)) return key;
+  switch (name) {
+    case 'type':
+    switch (key) {
+      default: return format('<b style="color:white;background:blue">[%s%s]</b>%s',
+        [new Array(5-key.toString().length).join(' '), key, parser.tokens[key]]);
+    }
+  }
+
+  return key;
+}
+
+function enumObject(o) {
+  document.writeln('<pre>');
+  for (var i in o) {
+    if (i in Array.prototype) continue;
+    document.writeln(i.fontcolor('red'), '==> ', getEnumValue(o, i, o[i]));
+  }
+  document.writeln('<\/pre>');
+}
+
+// 5656ms by my patch. :)
+var fn = 'parse_sample1.js';
+var context = $inline(fn);
+
+var d = new Date();
+var parser = new ParserLite();
+n = parser.parse(context, fn, 1);
+alert(new Date() - d );
+
+enumObject(n);
+</script>

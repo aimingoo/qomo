@@ -1,0 +1,25 @@
+﻿<HEAD>
+<TITLE>Qomo中的模板的基本使用</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<script src="../../Qomo.js"></script>
+</HEAD>
+
+<BODY>
+<div id="elem" class="myClass">hello, world!</div>
+</BODY>
+
+<script>
+var ctrl = new HtmlController('elem');
+var temp = new ComponentTemplet(ctrl);
+alert(temp);
+
+// sub-class test.
+function HtmlControllerEx() { }
+THtmlControllerEx = Class(THtmlController, 'HtmlControllerEx');
+
+var ctrl_ex = new HtmlControllerEx('elem');
+var temp_ex = new ComponentTemplet(ctrl_ex);
+alert(temp_ex);
+</script>
+
+</HTML>

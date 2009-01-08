@@ -1,0 +1,48 @@
+﻿<HTML>
+<HEAD>
+<TITLE>时间线(Timeline)示例</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<script src="../../Qomo.js"></script>
+</HEAD>
+
+<BODY>
+<script>
+var a = [1000, 2000, 3000];
+
+function showInfo(n) {
+  alert('hi, object T - ' + n);
+}
+
+function showInfo2(n) {
+  alert('hi, object T2 - ' + n);
+}
+
+function showInfo3(n) {
+  alert('hi, object T3 - ' + n);
+}
+
+// 第一种用法
+var T = TTimeline.Create(showInfo);
+T.start(a, 1000);
+
+// 第二种用法, 手工创建数据供应者
+var provide = TSequenceSteper.Create();
+provide.set('Data', a);
+provide.OnStep = function(step, last) {
+  return this.get('Data')[step];
+}
+var provide2 = TLineSteper.Create();
+provide2.set('Data', 1000);
+provide2.OnStep = function() {
+  return this.get('Data')
+}
+
+var T2 = TTimeline.Create(showInfo2);
+T2.start(provide, provide2);
+
+// 第三种用法(在OnTime中为provide创建last和step)
+var T3 = TTimer.Create(showInfo3);
+T3.start('Interval', 1000);
+</script>
+</BODY>
+</HTML>

@@ -1,0 +1,72 @@
+﻿----------------------------------------
+Qomo Project Release History
+
+ - contact qomo team: qomo.team@gmail.com
+----------------------------------------
+
+[2007.12.30] - v2.0 beta 1
+ + $import2() to import 3rd code or package.
+ + ParseLite() class, change from Narcissus. demo in Framework/TestCase.
+ + Class() support anonymous class.
+ + add Aggregate() to interface framework, and rewrite Aggregate().
+ - remove MuEvent.reset().
+ + some common class in Framework/Common
+ * HttpGetMachine() with set XmlHttpObject.
+ * HttpGetMachine() add OnSetRequestHeader event.
+ * ObjUtils.js - add Dict(), fix Enum()...,  virtual_object interfaced.
+ + SysUtils.js - Qomo types system utils, toEtor() Utils
+ + Pattern() object in SysUtils, and demo in Framework/TestCase.
+ * compat layer: rewrite and optimize ie5 compat, and safari is supported.
+ + a RegExp Performance Tool in Framework/Debug/TestCase.
+ * some optimize for interface, object, aspect and templet system.
+
+[2007.01.31] - v1.0 final
+ + full builder system
+ * fix framework struct, and rewrite path system for namespace
+ + $inline()
+ + some common class in Framework/Common
+ * remove some code from system.js to Qomo.js
+
+[2006.09.17] - v1.0 beta 2
+ * add more Interface support
+ * enhanced Qomo's Debug&Profiler
+ * a cool tool QomoHierarchyPoster.html with aspect sample
+ * change somecode in Object.js
+ + try UI Control Framework in Components/Controls/*
+ + public some component in Components/Controls/*
+ * fix some bug, match to firefox 1.5.0.6
+
+[2006.04.17] - v1.0 beta 1
+ + Qomo's Interface Framework in Framework/RTL/Interface.js
+ + Qomo's AOP Framework in Framework/RTL/Aspect.js
+ + Qomo's Debug&Profiler Utils in Framework/Debug/*
+ * change somecode in Object.js, JSEnhance.js, Compat/*
+ * some tiny change.
+
+[2006.03.13] - v1.0 field test 4
+ + Qomo's OOP Framework in Framework/RTL/Object.js
+ * fix some bug for Url() Object, Framework/RTL/Protocol.js
+ * remove somecode from JSEnhance.js to JSEnhance_altas.js
+ * add new namespace: Qomo.Thirdparty, defined in Qomo.spc
+ * some tiny change.
+
+[2006.03.07] - v1.0 field test 3
+ * framework changed: system.js, NamedSystem.js and Namespace.js
+ + Compat Layer Framework in Framework/Compat/*.*
+ + JavaScript Enhanced in Framework/RTL/JSEnhance.js
+ + mutil cast event system in Framework/RTL/JSEnhance.js
+
+[2006.02.20] - v1.0 field test 2
+ + NamedSystem.js with Url() Object and $import re-description.
+ + Namespace.js, support Namespace system.
+ + Alias.js, support alias system.
+ + add $QomoCoreFunction() to system.js
+ * fixed SafeArray2Str() in system.js, a tiny bug.
+
+[2006.02.13] - v1.0 field test 1
+ - system.js with $debug() and $import() core.
+
+
+=====================
+aimingoo : aiming@gmail.com
+    date : 2007.12.30

@@ -1,0 +1,2 @@
+﻿// a alias for RTL
+$alias('Qomo.RTL', Qomo.System.RTL);

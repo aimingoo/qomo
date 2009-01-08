@@ -1,0 +1,80 @@
+﻿<script src="../../Qomo.Config.js"></script>
+<script src="../../Qomo.js"></script>
+
+<script>
+
+// 以下的演示基于TObject进行. 包括:
+//   - 类声明
+//   - 构造
+//   - 特性
+//  _invalid_attrName = ['inherited', 'get', 'set'];
+
+// 1. 真实的MyObject总是在Class()的上下文中被调用
+// 2. MyObject事实上只被调用一次
+function MyObject() {
+  this.getData = function() {
+    return 100;
+  }
+
+  this.method1 = function() {
+    return 'hi'
+  }
+  this.calc1 = function() {
+    return 100;
+  }
+
+  this.calc2 = function(v1, v2) {
+    return 100 * v1 * v2;
+  }
+}
+TMyObject = Class(TObject, 'MyObject');
+
+function MyObjectEx() {
+  this.value = 1000;
+
+  // 调用父类中的属性读(/写)方法
+  this.getData = function() {
+    return this.inherited() * 1.5;
+  }
+
+  // 类方法声明
+  this.method1 = function() {
+    // 调用父类(同名)方法
+    alert('class\'s method');
+    return this.inherited();
+  }
+
+  // 类方法声明2
+  this.method2 = function() {
+    // 调用父类指定方法(或名字), 使用相同参数
+    var v1 = this.inherited('calc1');
+    // 调用父类指定方法(或名字), 使用不相同参数
+    var v2 = this.inherited(this.calc2, 1, 2);
+    return v1 + v2;
+  }
+
+  this.Create = function() {
+    // 对象方法覆盖类方法声明
+    this.method1 = function() {
+      // 调用类方法
+      return this.inherited();
+    }
+  }
+}
+TMyObjectEx = Class(TMyObject, 'MyObjectEx');
+
+obj = new MyObjectEx()
+alert(obj.method1());
+alert(obj.method2());
+alert(obj.get('Data'));
+
+/* need namespace
+var obj2 = Qomo.Thirdparty.TMyObjectEx.Create();
+alert(TMyObjectEx.SpaceName);
+alert(obj2.value);
+*/
+
+for (i in obj) {
+  document.writeln(i, '<BR>');
+}
+</script>

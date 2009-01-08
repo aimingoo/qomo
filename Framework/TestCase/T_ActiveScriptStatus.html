@@ -1,0 +1,38 @@
+﻿<HEAD>
+<TITLE>活动脚本</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<script src=first.js></script>
+<script src=second.js></script>
+</HEAD>
+
+
+<BODY style="color:red">
+<pre style="color:black">
+这个示例用于测试通过识别script对象的状态来检测当前正在运行中的脚本。
+
+正在运行中的脚本对象的script.readyState值为interactive。该属性的其它
+可能值为：
+  - uninitialized : 脚本对象刚被创建，脚本代码未载入；
+  - loading       : 脚本代码载入中；
+  - loaded        : 脚本代码完成读入，但尚未开始解释执行；
+  - interactive   : 解释执行过程中；
+  - complete      : 脚本已经执行完成。
+  
+本例中，正确的显示结果值应当为：
+  first.js->interactive
+  ----------
+  first.js->complete
+  second.js->interactive
+  ----------
+
+reportState()函数用以测试从second.js调用first.js中的函数时，活动状态
+仍旧应该是second.js。因此正确的显示结果值是：
+  reportState()
+  ----------
+  first.js->complete
+  second.js->interactive
+
+如果script.scr为空值，则表明正在执行当前document的&lt;script&gt;标签中的代
+码。
+</pre>
+</BODY>

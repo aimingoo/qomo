@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<HTML>
+<HEAD>
+<TITLE>Qomo Live Builder</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+
+<script src="../Qomo.Config.js"></script>
+<script>
+var $QReal = null;
+
+// get config from dialog paraments, or uses default config.
+if (window.dialogArguments) {
+  $Q = $QomoConfig = window.dialogArguments;
+  $QReal = $Q;
+}
+// must reset the option to true.
+document.writeln("<script>$QomoConfig.set('Building', true);<", "/script>");
+
+function trySyncConfig($Q) {
+  var r_conf = /^(has)|(is)/;
+  if ($QReal && $QReal.set) {
+    for (var n in $QReal) {
+      if (!r_conf.test(n)) continue;
+      n = n.replace(/^(has)|(is)/, '');
+      $QReal.set(n, $Q(n));
+    }
+  }
+}
+</script>
+
+</HEAD>
+
+<BODY style="padding: 15px">
+<pre id="lbInfo" style="word-wrap: break-word;overflow:none">1/4 - scripts loading...<BR/></pre>
+
+<script src='../Qomo.js'></script>
+<script language="JavaScript1.5">$import.setActiveUrl('../Components/Components.js');</script>
+<script src='../Components/Components.js'></script>
+<script>
+// (if you want, )try load third components...
+// $import('MyComponents.js');
+
+// try sync Qomo'sconfig to CustomBuilder Enveriment.
+trySyncConfig($Q);
+
+// try build to full context, and hook filter it
+var
+  compressedCtx = null;
+  uncompressedCtx = null;
+  noConfig = $Q('Build/RemoveConfig');
+  hookFunc = $Q('Build/BuilderHook');
+  autoClose = $Q('Build/AutoClose');
+
+if (hookFunc) {
+  hookFunc($builder);
+}
+uncompressedCtx = $builder.finish(noConfig);
+</script>
+
+<script language="JavaScript1.5">$import.setActiveUrl('Compressor.js');</script>
+<script src="Compressor.js"></script>
+<script>
+var processTimer = null;
+function doTimer() {
+  lbInfo.innerHTML += '>';
+  if (compressedCtx) {
+    clearInterval(processTimer);
+    returnValue = compressedCtx;
+    lbInfo.innerHTML += '<HR style="width:80%; height:1px"><P align="center"><B>complete.</B></P>'
+    if (autoClose) self.close();
+  }
+}
+
+var lbInfo = document.getElementById('lbInfo');
+if (typeof $builder == 'undefined') {
+  lbInfo.innerHTML += '4/4 - error: scripts load...<BR/>'.fontcolor('red');
+}
+else {
+  lbInfo.innerHTML += '2/4 - scripts analing...<BR/>';
+
+  var rpt = $builder.report();
+  lbInfo.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;- ' +
+                      'files: '+ rpt.fileCount + '; ' +
+                      'length: ' + uncompressedCtx.length +
+                      '<BR/>';
+
+  var compressor = new Compressor();
+
+  if ($Q('Build/SkipCompress')) {
+    if ($Q('Build/ClearComment')) {
+      lbInfo.innerHTML += '3/4 - clear comments...';
+      compressor.method = 3;
+      compressedCtx = compressor.compress(uncompressedCtx);
+
+    }
+    else {
+      lbInfo.innerHTML += '4/4 - skip compress...';
+      compressedCtx = uncompressedCtx;
+    }
+
+    doTimer();
+  }
+  else {
+    lbInfo.innerHTML += '3/4 - scripts compressing.<br>&nbsp;&nbsp;&nbsp;&nbsp;- ';
+    processTimer = setInterval(doTimer, 1000);
+
+    compressedCtx = compressor.compress(uncompressedCtx, function(ctx) {
+      compressedCtx = ctx;
+    });
+  }
+}
+</script>
+
+</BODY>
+</HTML>

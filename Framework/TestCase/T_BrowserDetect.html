@@ -1,0 +1,18 @@
+﻿<script>
+void function() {
+  var agt = navigator.userAgent, opera = !!window.opera,
+  ie = !!document.all,
+  moz = navigator.product== 'Gecko' && window.find,
+  __r_ff = /([Mozilla ]?Fire\w+)\/([\w|\+.]+)/,
+  checker = {
+    ie4 : ie && !document.getElementById,
+    ie5 : ie && !this.ie4 && !document.compatMode,
+    ie55 : this.ie5 && [].push,
+    ie6 : ie && document.compatMode,
+    ff107 : moz && __r_ff.exec(agt) && RegExp.$2=='1.0.7',
+    ff1501 : moz && __r_ff.exec(agt) && RegExp.$2=='1.5.0.1',
+    safari : agt.search(/safari/i) > -1
+  }
+  for (var i in checker) if (checker[i]) return alert(i);
+}()
+</script>

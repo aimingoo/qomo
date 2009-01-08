@@ -1,0 +1,74 @@
+<HTML>
+<HEAD>
+<TITLE>Base component framework - 3</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+</HEAD>
+
+<!-- load yui -->
+<link rel="stylesheet" type="text/css" href="yui_c/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="yui_c/autocomplete/assets/skins/sam/autocomplete.css" />
+<script type="text/javascript" src="yui_c/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="yui_c/animation-min.js"></script>
+<script type="text/javascript" src="yui_c/datasource-min.js"></script>
+<script type="text/javascript" src="yui_c/autocomplete-min.js"></script>
+
+<!-- yui component, code copy from yui examples -->
+<body class="yui-skin-sam">
+  <h3>Enter a state:</h3>
+  <div id="myAutoComplete">
+    <input id="myInput" type="text">
+    <div id="myContainer"></div>
+  </div>
+</body>
+
+<script type="text/javascript">
+YAHOO.example.Data = {
+arrayStates: [
+    "Alabama",
+    "Alaska",
+    "Arizona",
+    "Arkansas",
+    "California",
+    "Colorado",
+    "Connecticut"]
+};
+
+YAHOO.example.BasicLocal = function() {
+    // Use a LocalDataSource
+    var oDS = new YAHOO.util.LocalDataSource(YAHOO.example.Data.arrayStates);
+    // Optional to define fields for single-dimensional array
+    oDS.responseSchema = {fields : ["state"]};
+
+    // Instantiate the AutoComplete
+    var oAC = new YAHOO.widget.AutoComplete("myInput", "myContainer", oDS);
+    oAC.prehighlightClassName = "yui-ac-prehighlight";
+    oAC.useShadow = true;
+    
+    return {
+        oDS: oDS,
+        oAC: oAC
+    };
+}();
+</script>
+<!-- end of yui load -->
+
+<!-- load qomo -->
+<script src="../../../Qomo.js"></script>
+<!-- ours component and demo -->
+<script src="LableEdit.js"></script>
+<script>
+function YuiEdit() {
+  this.get_label = function() {
+    return this.assignedElement.previousSibling;
+  }
+  this.get_edit = function() {
+    return this.assignedElement.children.tags('input')(0);
+  }
+}
+TYuiEdit = Class(TLabledEdit, 'YuiEdit');
+
+var ed = TYuiEdit.Create('myAutoComplete');
+alert(ed.get('LableText'));
+ed.set('Value', 'hello, world.');
+</script>
+</HTML>

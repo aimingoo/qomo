@@ -1,0 +1,71 @@
+﻿<!-- script src="../Qomo.js"></script -->
+
+<script>
+
+// make test source data
+var src = (new Array(12+1)).join('test test test $$ test test test ')+'\n';
+var tbl = function(row) {
+  // a big formated table
+  var _tbl = [];
+  for (var i=0; i<10*10000; i++) {
+    _tbl.push(row);
+  }
+  return _tbl;
+}([0,1,2,3,4,5,6,7,8,9,10,11]);
+
+
+var arr = tbl, slot = src.split('$');
+var d1 = new Date();
+
+// 15813 for 10w in IE; in 12593 for 1w in FF.
+void function() {
+  var ss = [slot], slots = [];
+  function joinSlot(slot) {  // 1..n
+    for (var i=j=1,args=arguments,argn=args.length; i<argn; i++,j++) {
+      slot[j++] = args[i];
+    }
+    return slot.join('');
+  }
+
+  for (var i=0; i<arr.length; i++) {
+    slots.push( joinSlot.apply(this, ss.concat(arr[i])) );
+  }
+  str = slots.join('');
+}
+
+
+// 20578 for 10w in IE; in 11938 for 1w in FF.
+void function() {
+  function joinSlot2(slot, args) {  // 1..n
+    for (var i=0,j=1,argn=args.length; i<argn; i++,j++) {
+      slot[j++] = args[i];
+    }
+  }
+
+  var slots=[];
+  for (var i=0; i<arr.length; i++) {
+    joinSlot2(slot, arr[i]);
+    slots.push.apply(slots, slot);
+  }
+  str = slots.join('');
+}
+
+// 12516 for 10w in IE; in 11818 for 1w in FF.
+void function() {
+  function joinSlot3(slot, args) {  // 1..n
+    for (var i=0,j=1,argn=args.length; i<argn; i++,j++) {
+      slot[j++] = args[i];
+    }
+    return slot.join('');
+  }
+
+  var slots=[];
+  for (var i=0; i<arr.length; i++) {
+    slots.push( joinSlot3(slot, arr[i]) );
+  }
+  str = slots.join('');
+}()
+
+alert(new Date() - d1);
+
+</script>

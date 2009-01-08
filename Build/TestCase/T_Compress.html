@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<HEAD>
+<TITLE>Sample of Qomo's compress unit</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8" />
+
+<script src="../../Qomo.js"></script>
+<script language="JavaScript1.5">$import.setActiveUrl('../Components.js');</script>
+<script src="../Compressor.js"></script>
+</HEAD>
+
+<body>
+
+<textarea id="ctx" style="width:800px; height:600px"></textarea><BR />
+<button onclick="compress()">compress it..</button>
+
+</body>
+
+<script>
+
+var reqCallback = false;
+
+function cbCompressed(ctx) {
+  document.getElementById('ctx').value = ctx;
+  alert(ctx.length);
+}
+
+function compress() {
+  var ctx = document.getElementById('ctx').value;
+  var compressor = new Compressor();
+  if (reqCallback) {
+    compressor.compress(ctx, cbCompressed);
+  }
+  else {
+    ctx = compressor.compress(ctx);
+    document.getElementById('ctx').value = ctx;
+    alert(ctx.length);
+  }
+}
+
+</script>
+</HEAD>

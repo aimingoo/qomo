@@ -1,0 +1,68 @@
+<!-- script src="../RTL/Interface.js"></script -->
+<script src="../../Qomo.js"></script>
+
+<script>
+var o1={},o2={},o3={},o4={},o5={},o6={},o7={};
+
+o4.hasOwnAttribute = function() {
+  alert('o4.hasOwnAttribute');
+}
+o3.hasAttribute = function() {
+  alert('o3.hasAttribute');
+}
+o5.get = function(n){
+  switch (n) {
+  case 'Name': return 'myName';
+  case 'Value': return 'myValue';
+  case 'Length': return 100;
+  default:
+    return 'unknow attribute';
+  };
+}
+
+var consigner = {};
+var confer = [
+  [o1, ['*']],
+  [o2, ['*IJoPoint']],
+  [o3, ['*IJoPoints', '-IJoPoints.getLength', '+IClass.hasAttribute']],
+  [o4, ['IClass.hasOwnAttribute']],
+  [o5, ['*', '-IJoPoint']],
+  [o6, ['-IJoPoint', '+IJoPoint.assign:Assign']],
+  [o7, []]
+];
+
+// for test only.
+// don't query JoPoint. need instane of JoPoint()
+Interface.RegisterInterface(consigner, IJoPoint, IJoPoints, IClass);
+Delegate(consigner, confer);
+
+var intf = QueryInterface(consigner, IClass);
+intf.hasOwnAttribute();
+intf.hasAttribute();
+
+
+function MyObject() {
+  Attribute(this, 'aObj', null);
+
+  var proxy = function(o) {
+    return o.get('aObj');
+  }
+
+  Delegate(_cls().Create, [
+    [o4, ['IClass']],
+    [proxy, ['IClass.hasAttribute']],
+    [proxy, ['IJoPoints']]
+  ]);
+}
+TMyObject = Class(TObject, 'MyObject', IClass, IJoPoints);
+
+var obj = new MyObject();
+var intf2 = QueryInterface(obj, IClass);
+obj.set('aObj', o3);
+intf2.hasAttribute();
+intf2.hasOwnAttribute();
+
+var intf3 = QueryInterface(obj, IJoPoints);
+obj.set('aObj', o5);
+alert(intf3.getLength());
+</script>

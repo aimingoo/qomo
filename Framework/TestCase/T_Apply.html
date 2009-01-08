@@ -1,0 +1,38 @@
+<script>
+// disable import more
+$import = function() { };
+</script>
+
+<!-- compat ie5.x with apply/call -->
+<script src="../Compat/common_ie5.js"></script>
+
+<script>
+var obj = {
+  name: 'myname'
+}
+
+function enum2() {
+  var f = arguments.callee;
+  while (f.caller) {
+    document.writeln('<pre>', (f = f.caller).toString(), '</pre><BR>');
+  }
+}
+
+function test(mess) {
+  alert(this.name + ' say: ' + mess);
+
+  if (typeof __safe_caller == 'undefined')
+    document.writeln('<pre>',test.caller.toString().fontcolor('red'), '</pre><BR>');
+  else
+    document.writeln('<pre>',__safe_caller(test, 1).toString().fontcolor('red'), '</pre><BR>');
+
+  enum2();
+}
+
+function doTest() {
+  test.apply(obj, ['hello, my friend. ;)']);
+}
+
+// test it
+doTest();
+</script>

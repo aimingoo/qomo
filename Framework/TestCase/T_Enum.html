@@ -1,0 +1,16 @@
+﻿<script src="../../Qomo.js"></script>
+
+<script>
+var e = Enum('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Staturday', 'Sunday');
+
+alert(e.Thursday);
+alert(e.indexOf('Thursday'));
+alert(e.valueOf(e.Monday));
+alert([e.low, e.high]);
+
+var idx = e.low;
+do {
+  document.writeln(e.valueOf(idx), '<BR>');
+}
+while (e.high > idx++);
+</script>

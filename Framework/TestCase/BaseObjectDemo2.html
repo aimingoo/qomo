@@ -1,0 +1,124 @@
+﻿<script src='../../Qomo.js'></script>
+
+</pre>
+<script>
+function MyObject() {
+  this.value = 10;
+  this.foo = function () {
+    alert(this.value);
+  }
+
+  this.OnLoad = function(){};
+}
+TMyObject = Class(TObject, 'MyObject');
+
+obj = TMyObject.Create();
+
+document.writeln('一、对象成员列表<hr>');
+document.writeln('显示对象成员列表');
+for (i in obj) document.writeln(i, ': ', (obj[i]) ? obj[i].valueOf() : obj[i]);
+</script>
+</pre>
+
+
+<pre>
+<script>
+function MyObjectExt() {
+  this.value = 20;
+  this.foo2 = function () {};
+}
+TMyObjectExt = Class(TMyObject, 'MyObjectExt');
+
+obj = TMyObjectExt.Create();
+
+document.writeln('二、原型继承<hr>');
+document.writeln('1. 显示对象成员列表');
+for (i in obj) document.writeln(i, ': ', (obj[i]) ? obj[i].valueOf() : obj[i]);
+
+document.writeln();
+document.writeln('2. 修改原型, 添加foo3()方法');
+document.writeln('...\n');
+MyObject.prototype.foo3 = function(){};
+
+document.writeln('3. 复核对象成员列表');
+for (i in obj) document.writeln(i, ': ', (obj[i]) ? obj[i].valueOf() : obj[i]);
+</script>
+</pre>
+
+
+<pre>
+<script>
+document.writeln('三、事件与方法<hr>');
+
+// 声明事件响应句柄类型
+TNotifyHandle = function(v1, v2, v3){};
+
+function MyObject2() {
+  // 1. 声明私有(prvited)属性与方法
+  var value = 5;
+  var foo = function (v1, v2, vn) {
+    // ...
+  }
+  
+  // 2. 声明公开(public)属性与方法
+  this.value = 10;
+  this.foo = function (v1, v2, vn) {
+    // ...
+  }
+  
+  // 3. 声明事件
+  this.OnLoading = function(v1, v2, v3){};
+  this.OnLoad = TNotifyHandle;
+
+  // 4. 声明特性(非注册)
+  var Done = true;
+  this.setDone = function (v) {
+    Done = v;
+  }
+  this.getDone = function () {
+    return Done;
+  }
+}
+TMyObject2 = Class(TMyObject, 'MyObject2');
+
+// 5. 事件的使用
+function Handle_1(v1, v2, v3) {
+  document.writeln('hi, Handle_1');
+}
+function Handle_2() {
+  document.writeln('hi, Handle_2');
+}
+var obj = TMyObject2.Create();
+document.writeln('测试多投事件...');
+obj.OnLoading.add(Handle_1);
+obj.OnLoading.add(Handle_2);
+obj.OnLoading();
+
+document.writeln('\n测试事件响应(类型定义)的使用...')
+obj.OnLoad.add(Handle_2);
+obj.OnLoad();
+
+// 6. 示例对象方法调用
+obj.foo();
+</script>
+</pre>
+
+
+<pre>
+<script>
+// 6. 特性(Attribute)的使用
+var
+  v = 1234;
+  obj2 = TMyObject2.Create();
+
+document.writeln('四、属性、特性<hr>');
+document.writeln('取值: ', obj.get('Done'));
+
+obj.set('Done', v);
+document.writeln('置值到: ', v);
+
+document.writeln('复核值: ', obj.get('Done'));
+
+document.writeln('同类型的对象有不同的私有空间: ', obj2.get('Done'));
+</script>
+</pre>

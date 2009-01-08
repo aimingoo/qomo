@@ -1,0 +1,48 @@
+﻿<script src="../RTL/JSEnhance.js"></script>
+<script src="../Common/SysUtils.js"></script>
+
+<script>
+// etor ==> eVALUAtor
+var et = toEtor(function(x,n) {
+  return eval(n);
+});
+
+var aVal = 'global.';
+function foo1() {
+  var aVal = 'hello.';
+  var s1 = 'this info is ${aVal}.';
+  var s2 = 'info = $.';
+  var m = eval(et);
+  alert(s1.etor(m).replace(m));
+  alert(s2.replace(/\$/, '${aVal}'.etor(m)));
+}
+foo1();
+
+var et2 = et;
+function foo2() {
+  var aValue = 'in foo2.';
+  var m = eval(et2);
+
+  function myfunc() {
+    var aValue = 'in myunc.';
+    alert('${aValue}'.etor(m));  // <-- access upvalue
+  }
+  myfunc();
+}
+foo2();
+
+
+var et3 = et2;
+function foo3() {
+  var aValue = 'in foo3.';
+  var m;
+
+  function myfunc() {
+    var aValue = 'in myfunc.';
+    m = eval(et3);
+  }
+  myfunc();
+  alert('${aValue}'.etor(m));    // <-- access closure
+}
+foo3();
+</script>

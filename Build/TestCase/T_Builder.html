@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<HEAD>
+<TITLE>Sample of Qomo's builder unit</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8" />
+<script src='../../Qomo.Config.js'></script>
+<script>
+$QomoConfig.set('Building', true);
+
+/* you can set next paraments
+$QomoConfig.set('Profiling',      false);
+$QomoConfig.set('OutputDebug',    true);  // default
+$QomoConfig.set('Debugging',      false);
+$QomoConfig.set('NoneImport',     false);
+$QomoConfig.set('NoneAjax',       false);
+$QomoConfig.set('RepImport',      false);
+
+$QomoConfig.set('CompatLayer',    true);  // default
+$QomoConfig.set('IeAabsolutePath',false);
+$QomoConfig.set('IeDecode',       false);
+$QomoConfig.set('Interface',      false);
+$QomoConfig.set('Error',          false);
+$QomoConfig.set('Namespace',      false);
+$QomoConfig.set('Protocol',       false);
+
+$QomoConfig.set('Aspect',         false);
+$QomoConfig.set('Templet',        false);
+$QomoConfig.set('CommonClasses',  false);
+$QomoConfig.set('Graphics',       false);
+$QomoConfig.set('Database',       false);
+$QomoConfig.set('Controls',       false);
+*/
+</script>
+
+<script src='../../Qomo.js'></script>
+<script language="JavaScript1.5">$import.setActiveUrl('../Components/Components.js');</script>
+<script src='../Components/Components.js'></script>
+
+</HEAD>
+
+<BODY>
+<link rel="stylesheet" href="../Profilers.Report.css">
+<style>
+.fd5 {
+ overflow: visible;
+}
+
+#CodeBox {
+ width: 1024px;
+ height: 768px;
+}
+</style>
+
+<script>
+// if you want remove QomoConfig info from builded code,
+// you can set noConfig to true
+var noConfig = false;
+
+if ($debug && $debug.resetTo) {
+  $debug.resetTo(function() {
+    arguments.join = Array.prototype.join;
+   document.writeln(arguments.join(''));
+  });
+}
+
+document.writeln('<textarea id=CodeBox>');
+
+if (typeof $builder != 'undefined') {
+  document.writeln($builder.finish(noConfig));
+}
+else {
+	document.writeln('please recheck next parament\n', '---------');
+	document.writeln('$QomoConfig.set(\'Building\', true)');
+}
+
+document.writeln('<', '/textarea>');
+</script>
+</BODY>
+</HTML>

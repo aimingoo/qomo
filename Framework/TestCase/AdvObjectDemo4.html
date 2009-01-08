@@ -1,0 +1,140 @@
+﻿<HEAD>
+<TITLE>Qomo中AOP的基本示例</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<script src="../../Qomo.js"></script>
+</HEAD>
+
+
+<BODY>
+<!--
+织入（Weaving）: 组装"方面"，来创建一个被通知对象。这可以在编译时完成(例如使用AspectJ编译器)，也
+可以在运行时完成。Spring和其他纯Java AOP框架一样， 在运行时完成织入。
+
+由于Qomo不使用预编译机制，因此对于CustomAspect的织入，是采用用户代码的定制。也就是开发人员在织入
+位置手工插入Aspect的代码。——这看起来与AOP的“不知觉原则”有些冲突，但这可能是“轻量地”、“可
+定制地”实现Custom Aspect的唯一方法了。
+-->
+
+
+<script>
+// ------- 通过接口列举关注对象的连结点 --------
+var intf = QueryInterface(Class, IJoPoints);
+for (var i=0, imax=intf.getLength(), all=[]; i<imax; i++) {
+  all.push(intf.names(i));
+}
+alert(all.join('\n'));
+
+// ------- 为定制连结点建立切面 --------
+/*
+  通过Qomo的定制切面，可以对任意一个具有"连结点接口(IJoPoints)"的关注对象(observable)进行观察。
+被观察者应当具有如下条件：
+     - Interface.QueryInterface(<observable>, IJoPoints) !== undefined
+     - Interface.QueryInterface(<observable>, IJoPoints).items(pointcut) !== undefined
+  定制切面可以关联(assign)到一个observable，并指定一个用户定义的"AspectName"。而pointcut参数则
+必须是IJoPoints接口的items()中所能列举的名字之一。
+  下面的示例对Class()的"Initializtion"切点建立了切面。因此观察到了随后的TMyObject和TMyObjectEx
+在"类注册"过程中的Initializtion。
+*/
+var A3 = new CustomAspect();
+A3.assign(Class, 'ACustomTag1', 'Initializtion');
+A3.OnBefore.add(function(observable, aspectname, pointcut) {
+  alert('A3.OnBefore - %s, %s, %s'.format(observable.ClassName, aspectname, pointcut));
+});
+
+
+function MyObject() {
+  Attribute(this, 'Name', '', 'rw');
+
+  this.run = function() {
+    alert(this.get('Name'));
+  }
+  this.OnDoany = NullFunction;
+}
+TMyObject = Class(TObject, 'MyObject');
+
+// 尝试查询指定类是否存在
+var intf = QueryInterface(Class, IClassRegister);
+alert('Q: Class TMyObjectEx Exist?\n\nA: ' + intf.hasClass('TMyObjectEx'));
+
+function MyObjectEx() { }
+TMyObjectEx = Class(TMyObject, 'MyObjectEx');
+
+alert('Q: Class TMyObjectEx Exist?\n\nA: ' + intf.hasClass('TMyObjectEx'));
+
+// 取消切面对被关注者的关联, 则TMyObjectEx2过程不被关注
+A3.unassign();
+function MyObjectEx2() { }
+TMyObjectEx2 = Class(TMyObjectEx, 'MyObjectEx2');
+</script>
+
+
+<button onclick="obj.run(); obj2.run()">Class Aspect Test</button><br>
+<script>
+// -------- 创建对象obj和obj2 -------
+var obj = new MyObjectEx();
+obj.set('Name', 'obj');
+obj.OnDoany.add(function() {
+  alert('in event for obj...');
+});
+
+var obj2 = new MyObjectEx();
+obj2.set('Name', 'obj2');
+obj2.OnDoany.add(function() {
+  alert('in event for obj2...');
+});
+
+// ------- 建立关于类的切面 --------
+/*
+  Qomo允许用户代码直接关注到一个类。其真实的含义是关注于“这个类”的原型方法。这意味着
+该类的每一个实例在调用方法时都会被关注到。
+  当然，应该明确的是，该原型方法一旦被对象覆盖，那么这个切面对它的影响也就消失了。
+*/
+var A2 = new ClassAspect();
+A2.assign(TMyObjectEx, 'run', 'Method');
+
+A2.OnIntroduction.add(function() {
+  return intro.checked;
+});
+A2.OnAround.add(function() {
+  return around.checked;
+});
+A2.OnBefore.add(function() {
+  alert('A2.OnBefore');
+});
+</script>
+
+
+<button onclick="obj.OnDoany()">Object Aspect Test</button><button onclick="A.unassign()">取消切面</button><br>
+<script>
+// ------- 建立关于具体对象实例的切面 --------
+/*
+  Qomo允许用户代码直接关注到一个对象实例(的方法、事件和特性get/setter)。
+*/
+var A = new ObjectAspect();
+A.assign(obj, 'OnDoany', 'Event');
+
+A.OnIntroduction.add(function() {
+  return intro.checked;
+});
+A.OnAround.add(function() {
+  return around.checked;
+});
+A.OnBefore.add(function() {
+  alert('A.OnBefore');
+});
+
+var obj3 = new MyObjectEx();
+var A4 = new ObjectAspect();
+A4.assign(obj3, 'Name', 'AttrSetter');
+A4.OnAfter.add(function(observable, aspectname, pointcut) {
+  alert('"%s" getter access of object %s.'.format(aspectname, observable.get('Name')));
+});
+obj3.set('Name', 'obj3');
+</script>
+
+<!-- 切面代码使用 -->
+<input id=intro type=checkbox checked>进入检测(切面是否有效)<br>
+<input id=around type=checkbox checked>外围检测(是否执行原事件)<br>
+
+</BODY>
+</HTML>

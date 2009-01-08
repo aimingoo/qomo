@@ -1,0 +1,64 @@
+﻿<HEAD>
+<TITLE>对Qomo.js中特殊处理的测试</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+</HEAD>
+
+<BODY>
+<script src="../../Qomo.js"></script>
+<script>
+str = $inline("../../Qomo.js");
+// alert(str.length);  // strLength = filesize - 3
+
+var ajaxBlock = [
+  /function\s+Ajax\s*\([.\n)]*\)\s*\{/g,
+  /return http[;\s]+\}/g
+];
+
+var importBlock = [
+  /\$import\s*=\s*function\s*\([.\n)]*\)\s*\{/g,
+  /return _import[;\s]+\}\(\)[;\s]*/g
+];
+
+var inlineBlock = [
+  /\$inline\s*=\s*function\s*\([.\n)]*\)\s*\{/g,
+  /[;\s]+\}\(\)[;\s]*/g
+];
+
+function removeBlock(rBegin, rEnd, setNewStr, lastIndex) {
+  lastIndex = lastIndex || 0;
+  rBegin.lastIndex = lastIndex;
+  var v1 = rBegin.exec(this);
+  if (!v1 || v1.index < 0) return this;
+//alert(v1.index);
+
+  rEnd.lastIndex = rBegin.lastIndex;
+  var v2 = rEnd.exec(this);
+  if (!v2 || v2.index < 0) return this;
+//alert(v2.index);
+
+  return this.substr(0, v1.index) + setNewStr + this.substr(rEnd.lastIndex);
+}
+
+var
+  state = 0;
+function doRemove() {
+  var el = document.getElementById('ctx');
+  var ctx = el.innerText;
+  switch (state) {
+    case 0: el.innerText = str; break;
+    case 1: el.innerText = removeBlock.call(ctx, ajaxBlock[0], ajaxBlock[1], '// removed');break;
+    case 2: el.innerText = removeBlock.call(ctx, importBlock[0], importBlock[1], '// removed');break;
+    case 3: el.innerText = removeBlock.call(ctx, inlineBlock[0], inlineBlock[1], '// removed');break;
+    case 4: return;
+  }
+  if (state>0) {
+    alert('remove state: ' + (el.innerText!=ctx));
+  }
+  state ++;
+}
+
+</script>
+
+<textarea id="ctx" style="width:800px; height:600px"></textarea><br>
+<button onclick="doRemove(); this.innerText='移除('+state+')'">移除</button>
+</BODY>

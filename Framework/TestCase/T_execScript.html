@@ -1,0 +1,41 @@
+﻿<script>
+/**
+ * check success:
+ *   - firefox
+ *   - Opera
+ * invalid:
+ *   - IE
+ *   - safari
+ */
+
+function execScript(jscode) {
+  // next crash in ff
+  //   - window.eval(jscode, 'javascript');
+  // eval.call(window, jscode)
+  eval.apply(window, [jscode])
+}
+
+var code = 'var arr=["hello", "my friends."]';
+execScript(code);
+alert( (typeof arr == 'undefined') ? 'invalid!' : arr.join() );
+
+var code = 'function myFunc() { }';
+execScript(code);
+alert( (typeof myFunc == 'undefined') ? 'invalid!' : myFunc.toString() );
+
+// test for qomo's config loader
+var code = "void function($conf) {\n\r\
+  var conf = $conf ? $conf : {\n\r\
+  };\n\r\
+\n\r\
+  return ($Q = $QomoConfig = function(module) {\n\r\
+    var $q = arguments.callee;\n\r\
+    switch (module) {\n\r\
+      default: return conf['has'+module];\n\r\
+    }\n\r\
+  })\n\r\
+}(typeof($QomoConfig) == 'undefined' ? null : $QomoConfig);"
+
+execScript(code);
+alert( (typeof $Q == 'undefined') ? 'invalid!' : $Q.toString() );
+</script>

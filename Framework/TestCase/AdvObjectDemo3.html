@@ -1,0 +1,47 @@
+﻿<HEAD>
+<TITLE>Qomo中对象接口系统的高级特性使用</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<script src="../../Qomo.js"></script>
+</HEAD>
+
+
+<BODY>
+
+<script>
+IMyObject = function() {
+  this.OnDoany = Abstract;
+}
+
+function MyObject() {
+  this.getValue = function() {
+    return 10;
+  }
+  this.OnDoany = NullFunction;
+}
+TMyObject = Class(TObject, 'MyObject', IMyObject);
+
+function MyObjectEx() { }
+TMyObjectEx = Class(TMyObject, 'MyObjectEx');
+
+var obj = new MyObjectEx();
+obj.OnDoany.add(function() {
+  alert('in event...');
+  return true;
+});
+
+// 使用Interface.QueryInterface()查询接口
+var intf = Interface.QueryInterface(obj, IObject);
+var intf2 = Interface.QueryInterface(obj, IMyObject);
+alert(intf.hasEvent('OnDoany'));
+alert(intf.hasAttribute('Value'));
+alert(intf.hasOwnAttribute('Value'));
+alert(intf2.OnDoany());
+
+// 使用IInterface接口
+var I1 = Interface.QueryInterface(obj, IInterface);
+var I2 = I1.QueryInterface(IMyObject);
+alert(I2.OnDoany());
+</script>
+
+</BODY>
+</HTML>

@@ -1,0 +1,53 @@
+﻿<HTML>
+<HEAD>
+<TITLE>String的增强函数format()示例</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<script src="../../Qomo.js"></script>
+<!-- in IE5.5+
+<script src="../RTL/JSEnhance.js"></script>
+-->
+</HEAD>
+
+
+<BODY>
+
+<pre>
+<script>
+document.writeln(' -- 标准使用方法 --');
+s = 'this %s %s test: %s';
+
+document.writeln(s.format('first', 'cool', 'hello, this is my format() for js'));
+document.writeln(format(s, ['first', 'cool', 'hello, this is my format() for js']));
+
+document.writeln();
+document.writeln();
+document.writeln(' -- 在使用%n时的计数方法 --');
+s  = 'this strings: %s, %s, %1, %s, %2, %s';
+sm = '           ->  0,  1,      2,      3';
+document.writeln('[模板]', s);
+document.writeln('      ', sm);
+document.writeln('[显示]', format(s, ['v0', 'v1', 'v2', 'v3']));
+
+
+document.writeln();
+document.writeln();
+document.writeln(' -- 用%%显示单个的%, 并且不计数 --');
+s  = 'this strings: %s, %%, %1, %s, %2';
+sm = '           ->  0,         1';
+document.writeln('[模板]', s);
+document.writeln('      ', sm);
+document.writeln('[显示]', format(s, ['v0', 'v1', 'v2']));
+
+document.writeln();
+document.writeln();
+document.writeln(' -- 将%%n显示成的%n(以及%%s), 并且不计数 --');
+s  = 'this strings: %s, %%1, %%s, %1, %s, %2, %s';
+sm = '           ->  0,              1,      2';
+document.writeln('[模板]', s);
+document.writeln('      ', sm);
+document.writeln('[显示]', format(s, ['v0', 'v1', 'v2']));
+</script>
+</pre>
+
+</BODY>
+</HTML>

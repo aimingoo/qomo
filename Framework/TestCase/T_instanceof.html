@@ -1,0 +1,44 @@
+﻿<script>
+
+checked = {
+  '0': '<B>--------函数的特殊性----------</B>',
+  '直接声明函数': (function f1(){}) instanceof Function,
+  '声明匿名函数变量': (function(){}) instanceof Function,
+  '创建函数对象': (new Function()) instanceof Function,
+  'typeof()直接声明函数': typeof(function f1(){}),
+  'typeof()声明匿名函数变量': typeof(function(){}),
+  'typeof()创建函数对象': typeof(new Function()),
+
+  '1': '<B>-------特殊的类型-----------</B>',
+  '字符串常量': ('') instanceof String,
+  '字符串运算结果': (''+100) instanceof String,
+  '创建字符串对象': (new String('')) instanceof String,
+  '布尔常量': (false) instanceof Boolean,
+  '布尔运算结果': (true&&0) instanceof Boolean,
+  '创建布尔对象': (new Boolean(true)) instanceof Boolean,
+  '数值常量': (1) instanceof Number,
+  '数值运算结果': (1*0) instanceof Number,
+  '创建数值对象': (new Number(100*2)) instanceof Number,
+
+  '2': '<B>------以下值不是对象(运算或直接声明)---</B>',
+  '字符串立即值': ('') instanceof Object,
+  '布尔立即值': (true) instanceof Object,
+  '数值立即值': (1) instanceof Object,
+  'undefined值': (undefined) instanceof Object,
+  'null值': (null) instanceof Object,
+  'null具有特殊的typeof值': typeof(null),
+
+  '3': '<B>-------其它(more...)的是对象-----------</B>',
+  'warning': '<font color=red>在Qomo中以下值会发生变化(因为替换了Object)!!!</font>',
+  '对象声明': ({}) instanceof Object,
+  '创建对象': (new Object()) instanceof Object,
+  '数组立即值': ([]) instanceof Object,
+  '创建数组': (new Array()) instanceof Object,
+  '函数立即值': (function(){}) instanceof Object,
+  '正则立即值': (/./) instanceof Object
+}
+
+for (i in checked) {
+  document.writeln(i, ': ', checked[i], '<br>');
+}
+</script>

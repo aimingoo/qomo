@@ -1,0 +1,24 @@
+﻿<HEAD>
+<TITLE>Qomo中的模板的基本使用</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<script src='Qomo.js'></script>
+</HEAD>
+
+<BODY>
+
+<script>
+function MyTemplet() {
+  _set('TempletContext', '<font color="red">%Info%</font>');
+
+  Attribute(this, 'Info', 'hello, world!');
+}
+TMyTemplet = Class(TTemplet, 'MyTemplet');
+
+var ctx = new MyTemplet();
+document.writeln(ctx);
+</script>
+
+</BODY>
+
+
+</HTML>

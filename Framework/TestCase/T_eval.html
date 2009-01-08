@@ -1,0 +1,30 @@
+﻿<!-- 测试window.eval()、window.execScript()和Global.eval()在
+ IE 、FireFox下的不同表现 -->
+
+<script>
+var T_Data = 'Data Init...';
+
+function t1() {
+  // window.execScript(...)
+  window.eval('T_Data = "Data fixed by t1"', 'JavaScript');
+  alert(T_Data);
+}
+
+function t2() {
+  var T_Data = 'Data Init...';
+  window.eval('T_Data = "Local Data fixed by t2"');
+  alert(T_Data);
+  alert(window.T_Data);
+}
+
+function t3() {
+  var T_Data = 'Data Init...';
+  eval('T_Data = "Local Data fixed by t2"');
+  alert(T_Data);
+  alert(window.T_Data);
+}
+
+t1();
+t2();
+t3();
+</script>

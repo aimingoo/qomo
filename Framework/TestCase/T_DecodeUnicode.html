@@ -1,0 +1,116 @@
+﻿<!-- http://www.blueidea.com/bbs/NewsDetail.asp?lp=1&id=2399544 -->
+<!-- http://sheneyan.com/test/testAjaxPost.htm -->
+
+<html>
+<head>
+<title>xml Http</title>
+<script language=javascript>
+//***Author: Hutia
+//last modified by shouhaimu(QQ:30836570)
+//last modified by aimingoo(QQ:2836420)
+
+//测试用的网址
+// url="file:///M:/Project Backup/WEUI/Everest内核篇(四).txt";
+// url="http://www.sina.com.cn/";
+// url="http://www.microsoft.com/";
+url="http://www.yahoo.com/";
+
+//用同步方式获取网页内容
+function loadURL(strURL){
+	if(!strURL){return(false);}
+	var xmlHTTP=new ActiveXObject("MSXML2.XMLHTTP");
+	xmlHTTP.open("GET",strURL,false);
+	xmlHTTP.send("");
+	return xmlHTTP;
+}
+
+// --- shouhaimu(bjhaoyun)在“经典论坛”公开的reCode()
+
+//**全局变量**
+//glbEncode储存ascii到unicode字符的转换,这样做的好处是可以提高重复解码时的解码效率
+glbEncode=new Array();
+window.execScript(''+
+ 'Function rsB(vIn) \n'+
+ '  rsB=MidB(vIn,1) \n'+
+ 'End Function \n'+
+
+ 'Function rsChar(ss) \n'+
+ '  rsChar = Chr(ss) \n'+
+ 'End Function', 'VBScript');
+function reCode(b){
+	var t=rsB(b);
+	t=escape(t).replace(/%u/g,"").replace(/(.{2})(.{2})/g,"%$2%$1").replace(/%([A-Z].)%(.{2})/g,"@$1$2");
+	t=t.split("@");
+	var i=0,j=t.length,k;
+	while(++i<j)
+	{
+		k=t[i].substring(0,4);
+		if(!glbEncode[k])glbEncode[k]=escape(rsChar(eval("0x"+k))).substring(1,6);
+		t[i]=glbEncode[k]+t[i].substring(4);
+	}
+	return unescape(t.join("%"));
+}
+
+// --- 高性能的toCurrentCharset(), by aimingoo
+  window.execScript(''+
+   'Function Asc2Unicode(n) \n'+
+   ' Asc2Unicode = Chr(n) \n'+
+   'End Function \n'+
+
+   'Function SafeArray2Str(body) \n'+
+   ' SafeArray2Str = CStr(body)\n'+
+   'End Function','VBScript');
+
+  var r1 = /%u(..)(..)/g, r2 = /%([8,9,A-F].)%(..)/g;
+  var toUnicode = function($0, $1, $2) {return Asc2Unicode(parseInt($1+$2, 16))}
+  toCurrentCharset = function(body) {
+    return unescape(escape(SafeArray2Str(body)).replace(r1, "%$2%$1").replace(r2, toUnicode));
+  }
+
+// --- 改良版的vbs_JoinBytes(), by aimingoo
+window.execScript(''+
+'Function vbs_JoinBytes(body) \n'+
+'  Dim i, l, n, c1, c2, S, SS() \n'+
+'  S = CStr(body) \n'+
+'  l = LenB(S) \n'+
+'  ReDim SS(l) \n'+
+
+'  n = 0 \n'+
+'  For i = 1 To l \n'+
+'    c1 = AscB(MidB(S, i, 1)) \n'+
+'    If c1 < &H80 Then \n'+
+'      SS(n) = Chr(c1) \n'+
+'    Else \n'+
+'      c2 = AscB(MidB(S, i+1, 1)) \n'+
+'      SS(n) = Chr(CLng(c1) * &H100 + c2) \n'+
+'      i = i + 1  \n'+
+'    End If \n'+
+'    n = n + 1 \n'+
+'  Next \n'+
+
+'  vbs_JoinBytes = Join(SS, vbNullString) \n'+
+'End Function','VBScript');
+
+function init(){
+	stTime1=(new Date()).getTime();
+	ree=loadURL(url).responseBody;
+	stTime2=(new Date()).getTime();
+
+	s001=reCode(ree);
+	stTime3=(new Date()).getTime();
+	s002=toCurrentCharset(ree);
+	stTime4=(new Date()).getTime();
+	s003=vbs_JoinBytes(ree);
+	stTime5=(new Date()).getTime();
+
+	document.body.innerText="共计"+s001.length+"字节\n下载耗时："+(stTime2-stTime1)+
+	  "\n解码耗时(reCode)："+(stTime3-stTime2)+
+	  "\n解码耗时(toCurrentCharset)："+(stTime4-stTime3) +
+	  "\n解码耗时(vbs_JoinBytes)："+(stTime5-stTime4);
+}
+</script>
+</head>
+<body onload=init()>
+下载中...
+</body>
+</html>

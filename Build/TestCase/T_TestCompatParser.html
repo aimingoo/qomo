@@ -1,0 +1,26 @@
+﻿<HEAD>
+<TITLE>Qomo中链入兼容包的测试代码</TITLE>
+<META HTTP-EQUIV="Content-Type" content="text/html; charset=utf-8">
+<script src='../../Qomo.Config.js'></script>
+<script>
+  $QomoConfig.set('IeAabsolutePath', true);
+  $QomoConfig.set('IeDecode', true);
+  $QomoConfig.set('Build/CompatIE50', true);
+</script>
+<script src='../../Qomo.js'></script>
+<script src='../CompatInlineParser.js'></script>
+</HEAD>
+
+<BODY>
+<script language="JavaScript1.5">$import.setActiveUrl(document.location.href);</script>
+<script>
+document.writeln('<textarea style="width:90%; height:90%">');
+
+var str = $inline('../../Framework/Compat/CompatInline.js');
+document.writeln(CompatInlineParser(str, '../../Framework/Compat/'));
+
+document.writeln('</textarea');
+</script>
+</BODY>
+
+</HTML>
