@@ -1,0 +1,1 @@
+Qomo Project is a JavaScript-implemated, custom-cuttable OOP framework (with namespace, AOP, templet, etc) and UI Library for Web Browsers. The project is opened for all JavaScript fans, DOM specialists.
